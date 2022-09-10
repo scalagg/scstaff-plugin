@@ -16,7 +16,9 @@ data class StaffProfile(
 ) : IDataStoreObject, Savable
 {
     var staffChannel: StaffChatChannelType? = null
+
     var staffMessagesEnabled = true
+    var staffVisibilityEnabled = true
 
     override fun save() =
         DataStoreObjectControllerCache

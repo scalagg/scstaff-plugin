@@ -1,4 +1,4 @@
-package gg.scala.staff.commands
+package gg.scala.staff.commands.toggle
 
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
@@ -16,28 +16,28 @@ import java.util.concurrent.CompletableFuture
  * @since 9/10/2022
  */
 @AutoRegister
-object StaffMessagesToggleCommand : ScalaCommand()
+object StaffVisibilityToggleCommand : ScalaCommand()
 {
-    @CommandAlias("togglestaffmessages|tsm|staffmessages")
+    @CommandAlias("togglestaffvisibility|tsv|staffvisibility")
     @CommandPermission(ScalaStaffPlugin.STAFF_NODE)
-    fun onStaffMessages(player: ScalaPlayer): CompletableFuture<Void>
+    fun onStaffVisibility(player: ScalaPlayer): CompletableFuture<Void>
     {
         val profile = StaffProfileService.find(player.uniqueId)
             ?: throw ConditionFailedException(
                 "${ScalaStaffPlugin.PREFIX_PLUGIN} Something went terrible wrong while performing this command"
             )
 
-        profile.staffMessagesEnabled = !profile.staffMessagesEnabled
+        profile.staffVisibilityEnabled = !profile.staffVisibilityEnabled
 
         return profile.save()
             .thenRun {
                 player.sendMessage(
-                    if (profile.staffMessagesEnabled)
+                    if (profile.staffVisibilityEnabled)
                     {
-                        "${ChatColor.GREEN}You are now receiving staff messages."
+                        "${ChatColor.GREEN}You are now viewing staff."
                     } else
                     {
-                        "${ChatColor.RED}You are no longer receiving staff messages."
+                        "${ChatColor.RED}You are no longer viewing staff."
                     }
                 )
             }
