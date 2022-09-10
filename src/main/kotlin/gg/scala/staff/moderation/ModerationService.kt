@@ -60,11 +60,11 @@ object ModerationService
         ))
     }
 
+    val connection = StaffMessageStream.aware.internal().connect()
+
     @Configure
     fun configure()
     {
-        val connection = StaffMessageStream.aware.internal().connect()
-
         ScoreboardHandler.scoreboardOverride =
             ModModeScoreboardOverride
 

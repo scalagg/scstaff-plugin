@@ -18,8 +18,8 @@ object StaffNametagProvider : NametagProvider(
     /**
      * We want to keep vanished/mod-moded players on the bottom of the tablist
      *
-     * It's really just for asthetic purposes as regular players
-     * are unable to view the tablist entry anyways.
+     * It's really just for aesthetic purposes as regular players
+     * are unable to view the tablist entry anyway.
      *
      * @author GrowlyX
      * @since 9/10/2022

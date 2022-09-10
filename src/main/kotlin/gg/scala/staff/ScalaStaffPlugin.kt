@@ -1,6 +1,7 @@
 package gg.scala.staff
 
 import gg.scala.commons.ExtendedScalaPlugin
+import gg.scala.commons.config.annotations.ContainerConfig
 import me.lucko.helper.plugin.ap.Plugin
 import me.lucko.helper.plugin.ap.PluginDependency
 import net.evilblock.cubed.util.CC
@@ -19,6 +20,7 @@ import org.bukkit.ChatColor
         PluginDependency("cloudsync", soft = true)
     ]
 )
+@ContainerConfig("config", ScalaStaffConfig::class)
 class ScalaStaffPlugin : ExtendedScalaPlugin()
 {
     companion object

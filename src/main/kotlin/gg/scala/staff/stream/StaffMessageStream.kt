@@ -18,7 +18,7 @@ import org.bukkit.ChatColor
  * @author GrowlyX
  * @since 9/10/2022
  */
-@Service
+@Service(priority = 100)
 object StaffMessageStream
 {
     @JvmStatic
@@ -37,7 +37,7 @@ object StaffMessageStream
 
     fun send(
         message: String, includeOrigin: Boolean = true,
-        additionalPermission: String? = null,
+        mustNotHaveMetadata: String? = null,
         context: AwareThreadContext = AwareThreadContext.ASYNC
     )
     {
@@ -47,7 +47,7 @@ object StaffMessageStream
             "from" to ServerSync
                 .getLocalGameServer().id,
             "includeFrom" to includeOrigin,
-            "additionalFlag" to additionalPermission
+            "additionalFlag" to mustNotHaveMetadata
         ).publish(
             channel = CHANNEL, context = context
         )
@@ -80,8 +80,11 @@ object StaffMessageStream
                 val ableToReceive = it.hasPermission(ScalaStaffPlugin.STAFF_NODE) &&
                         profile.staffMessagesEnabled
 
-                ((additionalFlag == null || additionalFlag == "null") ||
-                        lemonPlayer.hasPermission(additionalFlag)) && ableToReceive
+                val flag = if (additionalFlag == null) true else
+                    if (additionalFlag == "reports-disabled") profile.staffReportNotificationsEnabled else
+                        !lemonPlayer.hasMetadata(additionalFlag)
+
+                ((additionalFlag == null || additionalFlag == "null") || flag) && ableToReceive
             }.forEach {
                 it.sendMessage("$baseMessage$content")
             }

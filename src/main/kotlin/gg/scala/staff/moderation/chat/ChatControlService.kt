@@ -1,4 +1,4 @@
-package gg.scala.staff.chat
+package gg.scala.staff.moderation.chat
 
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service

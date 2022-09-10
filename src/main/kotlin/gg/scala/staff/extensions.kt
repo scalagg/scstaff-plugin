@@ -1,5 +1,7 @@
 package gg.scala.staff
 
+import gg.scala.flavor.inject.Inject
+import gg.scala.flavor.service.Service
 import gg.scala.lemon.handler.PlayerHandler
 import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
@@ -10,6 +12,16 @@ import org.bukkit.entity.Player
  * @author GrowlyX
  * @since 9/10/2022
  */
+@Service
+object InjectionContainer
+{
+    @Inject
+    lateinit var plugin: ScalaStaffPlugin
+}
+
+fun plugin() = InjectionContainer.plugin
+fun config() = plugin().config<ScalaStaffConfig>()
+
 fun notify(
     sender: CommandSender, message: String
 )

@@ -8,7 +8,7 @@ import gg.scala.commons.acf.annotation.Syntax
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.util.QuickAccess
-import gg.scala.staff.chat.ChatControlService
+import gg.scala.staff.moderation.chat.ChatControlService
 import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
