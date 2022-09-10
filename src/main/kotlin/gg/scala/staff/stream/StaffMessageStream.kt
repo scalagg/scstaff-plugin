@@ -36,7 +36,7 @@ object StaffMessageStream
     }
 
     fun send(
-        message: String, includeFrom: Boolean = true,
+        message: String, includeOrigin: Boolean = true,
         additionalPermission: String? = null,
         context: AwareThreadContext = AwareThreadContext.ASYNC
     )
@@ -46,7 +46,7 @@ object StaffMessageStream
             "message" to message,
             "from" to ServerSync
                 .getLocalGameServer().id,
-            "includeFrom" to includeFrom,
+            "includeFrom" to includeOrigin,
             "additionalFlag" to additionalPermission
         ).publish(
             channel = CHANNEL, context = context
