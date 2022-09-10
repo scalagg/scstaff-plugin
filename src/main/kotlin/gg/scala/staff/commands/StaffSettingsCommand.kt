@@ -1,0 +1,25 @@
+package gg.scala.staff.commands
+
+import gg.scala.commons.acf.annotation.CommandAlias
+import gg.scala.commons.acf.annotation.CommandPermission
+import gg.scala.commons.annotations.commands.AutoRegister
+import gg.scala.commons.command.ScalaCommand
+import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.staff.moderation.ModerationService
+import gg.scala.staff.notify
+import gg.scala.staff.settings.StaffSettingsMenu
+
+/**
+ * @author GrowlyX
+ * @since 9/10/2022
+ */
+@AutoRegister
+object StaffSettingsCommand : ScalaCommand()
+{
+    @CommandAlias("staffsettings|staffoptions")
+    @CommandPermission("scstaff.command.staffsettings")
+    fun onStaffSettings(player: ScalaPlayer)
+    {
+        StaffSettingsMenu().openMenu(player.bukkit())
+    }
+}
