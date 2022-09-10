@@ -1,5 +1,9 @@
 package gg.scala.staff.settings
 
+import gg.scala.commons.acf.ConditionFailedException
+import gg.scala.lemon.handler.PlayerHandler
+import gg.scala.lemon.player.metadata.Metadata
+import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.profile.StaffProfileService
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
@@ -27,7 +31,7 @@ class StaffSettingsMenu : Menu("Staff Settings")
         val profile = StaffProfileService.find(player)
             ?: return buttons
 
-        buttons[3] = ItemBuilder
+        buttons[1] = ItemBuilder
             .of(Material.SIGN)
             .name(
                 "${
@@ -49,7 +53,7 @@ class StaffSettingsMenu : Menu("Staff Settings")
                 profile.save()
             }
 
-        buttons[5] = ItemBuilder
+        buttons[3] = ItemBuilder
             .of(Material.EYE_OF_ENDER)
             .name(
                 "${
@@ -69,6 +73,60 @@ class StaffSettingsMenu : Menu("Staff Settings")
             .toButton { _, _ ->
                 profile.staffVisibilityEnabled = !profile.staffVisibilityEnabled
                 profile.save()
+            }
+
+        buttons[5] = ItemBuilder
+            .of(Material.DIAMOND_AXE)
+            .name(
+                "${
+                    if (profile.staffAutoVanishEnabled) CC.B_GREEN else CC.B_RED
+                }Auto Vanish"
+            )
+            .addToLore(
+                "${CC.WHITE}Enable or disable auto",
+                "${CC.WHITE}vanish on your account.",
+                "",
+                "${CC.WHITE}Current: ${CC.YELLOW}${
+                    profile.staffAutoVanishEnabled
+                }",
+                "",
+                "${CC.GREEN}Click to toggle!"
+            )
+            .toButton { _, _ ->
+                profile.staffAutoVanishEnabled = !profile.staffAutoVanishEnabled
+                profile.save()
+            }
+
+        val lemonProfile = PlayerHandler.find(player.uniqueId)
+            ?: return buttons
+
+        buttons[7] = ItemBuilder
+            .of(Material.PAPER)
+            .name(
+                "${
+                    if (lemonProfile.hasMetadata("filter-disabled")) CC.B_GREEN else CC.B_RED
+                }Filtered Messages"
+            )
+            .addToLore(
+                "${CC.WHITE}Enable or disable receival",
+                "${CC.WHITE}of filtered messages.",
+                "",
+                "${CC.WHITE}Current: ${CC.YELLOW}${
+                    lemonProfile.hasMetadata("filter-disabled")
+                }",
+                "",
+                "${CC.GREEN}Click to toggle!"
+            )
+            .toButton { _, _ ->
+                if (lemonProfile.hasMetadata("filter-disabled"))
+                {
+                    lemonProfile.removeMetadata("filter-disabled")
+                } else
+                {
+                    lemonProfile.updateOrAddMetadata("filter-disabled", Metadata(true))
+                }
+
+                lemonProfile.save()
             }
 
         return buttons

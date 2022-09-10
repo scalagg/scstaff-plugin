@@ -27,7 +27,7 @@ object StaffMessageStream
     @Inject
     lateinit var plugin: ScalaStaffPlugin
 
-    private val aware by lazy {
+    val aware by lazy {
         AwareBuilder
             .of<AwareMessage>(CHANNEL)
             .logger(this.plugin.logger)

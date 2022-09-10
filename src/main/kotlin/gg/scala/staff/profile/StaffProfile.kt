@@ -17,8 +17,11 @@ data class StaffProfile(
 {
     var staffChannel: StaffChatChannelType? = null
 
+    var staffReportNotificationsEnabled = true
+
     var staffMessagesEnabled = true
     var staffVisibilityEnabled = true
+    var staffAutoVanishEnabled = false
 
     override fun save() =
         DataStoreObjectControllerCache
