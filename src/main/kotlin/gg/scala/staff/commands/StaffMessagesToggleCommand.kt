@@ -14,7 +14,7 @@ import gg.scala.staff.profile.StaffProfileService
  * @since 9/10/2022
  */
 @AutoRegister
-object ToggleStaffMessagesCommand : ScalaCommand()
+object StaffMessagesToggleCommand : ScalaCommand()
 {
     @CommandAlias("togglestaffmessages|tsm|staffmessages")
     @CommandPermission(ScalaStaffPlugin.STAFF_NODE)
@@ -22,7 +22,7 @@ object ToggleStaffMessagesCommand : ScalaCommand()
     {
         val profile = StaffProfileService.find(player.uniqueId)
             ?: throw ConditionFailedException(
-                "Something went terrible wrong while performing this command"
+                "${ScalaStaffPlugin.PREFIX_PLUGIN} Something went terrible wrong while performing this command"
             )
     }
 }

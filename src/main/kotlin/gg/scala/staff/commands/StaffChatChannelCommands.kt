@@ -1,4 +1,4 @@
-package gg.scala.staff.channel
+package gg.scala.staff.commands
 
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
@@ -9,6 +9,8 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.util.QuickAccess
+import gg.scala.staff.ScalaStaffPlugin
+import gg.scala.staff.channel.StaffChatChannelType
 import gg.scala.staff.profile.StaffProfileService
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -27,7 +29,7 @@ object StaffChatChannelCommands : ScalaCommand()
         player: ScalaPlayer, @Optional message: String?
     )
     {
-        this.performStaffChannel(
+        performStaffChannel(
             player, StaffChatChannelType.Owner, message
         )
     }
@@ -38,7 +40,7 @@ object StaffChatChannelCommands : ScalaCommand()
         player: ScalaPlayer, @Optional message: String?
     )
     {
-        this.performStaffChannel(
+        performStaffChannel(
             player, StaffChatChannelType.Developer, message
         )
     }
@@ -49,7 +51,7 @@ object StaffChatChannelCommands : ScalaCommand()
         player: ScalaPlayer, @Optional message: String?
     )
     {
-        this.performStaffChannel(
+        performStaffChannel(
             player, StaffChatChannelType.Staff, message
         )
     }
@@ -60,7 +62,7 @@ object StaffChatChannelCommands : ScalaCommand()
         player: ScalaPlayer, @Optional message: String?
     )
     {
-        this.performStaffChannel(
+        performStaffChannel(
             player, StaffChatChannelType.Staff, message
         )
     }
@@ -71,7 +73,7 @@ object StaffChatChannelCommands : ScalaCommand()
     {
         val profile = StaffProfileService.find(player.bukkit())
             ?: throw ConditionFailedException(
-                "Something went terribly wrong while performing this command"
+                "${ScalaStaffPlugin.PREFIX_PLUGIN} Something went terribly wrong while performing this command"
             )
 
         if (message.isNullOrEmpty())

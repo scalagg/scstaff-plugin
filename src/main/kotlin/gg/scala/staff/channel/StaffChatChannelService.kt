@@ -24,11 +24,8 @@ object StaffChatChannelService
         channelType: StaffChatChannelType
     )
     {
-        val composite =
-            StaffChatChannelComposite(channelType)
-
-        val channelName = channelType
-            .name.lowercase()
+        val composite = StaffChatChannelComposite(channelType)
+        val channelName = channelType.name.lowercase()
 
         val channel = ChatChannelBuilder
             .newBuilder()
