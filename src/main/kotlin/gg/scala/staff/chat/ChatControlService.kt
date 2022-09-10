@@ -3,10 +3,11 @@ package gg.scala.staff.chat
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import gg.scala.lemon.cooldown.CooldownHandler
-import gg.scala.lemon.cooldown.impl.ChatCooldown
-import gg.scala.lemon.cooldown.impl.SlowChatCooldown
+import gg.scala.lemon.cooldown.type.PlayerCooldown
+import gg.scala.lemon.handler.ChatHandler
 import gg.scala.lemon.listener.PlayerListener
 import net.evilblock.cubed.util.CC
+import org.bukkit.entity.Player
 
 /**
  * @author GrowlyX
@@ -18,9 +19,26 @@ object ChatControlService
     var chatSilenced = false
     var chatSlowdown = 0
 
+    object ChatCooldown : PlayerCooldown("chat")
+    {
+        override fun durationFor(player: Player) =
+            if (player.hasPermission("scstaff.chat.cooldown.donator"))
+                1000L else 3000L
+    }
+
+    object SlowChatCooldown : PlayerCooldown("slow-chat")
+    {
+        override fun durationFor(player: Player) =
+            chatSlowdown * 1_000L
+    }
+
     @Configure
     fun configure()
     {
+        CooldownHandler.register(
+            ChatCooldown, SlowChatCooldown
+        )
+
         PlayerListener.defaultChannelProtection = context@{ event ->
             if (
                 chatSilenced &&
