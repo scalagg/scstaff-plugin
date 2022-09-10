@@ -23,7 +23,7 @@ object StaffJumpCommand : ScalaCommand()
 {
     @CommandAlias("jump")
     @CommandCompletion("@players")
-    @CommandPermission("lemon.command.jump")
+    @CommandPermission("scstaff.command.jump")
     fun onJump(player: Player, target: AsyncLemonPlayer): CompletableFuture<Void>
     {
         return target.validatePlayers(player, false) { lemonPlayer ->

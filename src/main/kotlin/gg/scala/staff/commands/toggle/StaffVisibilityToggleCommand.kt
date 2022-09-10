@@ -8,6 +8,7 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.profile.StaffProfileService
+import net.evilblock.cubed.visibility.VisibilityHandler
 import org.bukkit.ChatColor
 import java.util.concurrent.CompletableFuture
 
@@ -28,6 +29,7 @@ object StaffVisibilityToggleCommand : ScalaCommand()
             )
 
         profile.staffVisibilityEnabled = !profile.staffVisibilityEnabled
+        VisibilityHandler.updateAllTo(player.bukkit())
 
         return profile.save()
             .thenRun {
