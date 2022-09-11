@@ -30,6 +30,16 @@ object ReportCommand : ScalaCommand()
     {
         val coolDowns = ReportProcessor.coolDowns
 
+        if (target.bukkitPlayer!!.uniqueId == player.uniqueId)
+        {
+            throw ConditionFailedException("You're not allowed to report yourself.")
+        }
+
+        if (target.hasPermission("scstaff.command.report.bypass"))
+        {
+            throw ConditionFailedException("You're unable to report ${CC.SEC}${target.getColoredName()}${CC.RED}.")
+        }
+
         if (!coolDowns.test(player.uniqueId))
         {
             val remaining = coolDowns
