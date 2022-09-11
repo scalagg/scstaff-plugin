@@ -19,14 +19,20 @@ import net.evilblock.cubed.scoreboard.ScoreboardHandler
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.player.PlayerSnapshot
 import net.evilblock.cubed.visibility.VisibilityHandler
+import org.bukkit.entity.ExperienceOrb
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.EventPriority
+import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityTargetEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.metadata.FixedMetadataValue
 import java.util.*
-import java.util.concurrent.ForkJoinPool
 
 /**
  * @author GrowlyX
@@ -41,7 +47,7 @@ object ModerationService
     private val snapshots =
         mutableMapOf<UUID, PlayerSnapshot>()
 
-    fun displayStaffInfo(player: Player, profile: StaffProfile, lemonPlayer: LemonPlayer)
+    private fun displayStaffInfo(player: Player, profile: StaffProfile, lemonPlayer: LemonPlayer)
     {
         player.sendMessage(arrayOf(
             "${CC.B_PRI}Staff Information:",
@@ -60,13 +66,69 @@ object ModerationService
         ))
     }
 
-    val connection = StaffMessageStream.aware.internal().connect()
+    val connection = StaffMessageStream
+        .aware.internal().connect()!!
 
     @Configure
     fun configure()
     {
         ScoreboardHandler.scoreboardOverride =
             ModModeScoreboardOverride
+
+        val interaction: (Player, Cancellable, String) -> Unit = { player, event, action ->
+            if (player.hasMetadata("mod-mode"))
+            {
+                player.sendMessage("${CC.RED}You cannot $action while in mod-mode.")
+                event.isCancelled = true
+            } else if (player.hasMetadata("vanished"))
+            {
+                player.sendMessage("${CC.RED}You cannot $action while vanished.")
+                event.isCancelled = true
+            }
+        }
+
+        Events.subscribe(EntityTargetEvent::class.java)
+            .handler { event ->
+                if (event.reason != EntityTargetEvent.TargetReason.CUSTOM)
+                {
+                    val entity = event.entity
+                    val target = event.target
+
+                    if (
+                        (entity is ExperienceOrb || entity is LivingEntity) &&
+                        target is Player && target.hasMetadata("vanished")
+                    )
+                    {
+                        event.isCancelled = true
+                    }
+                }
+            }
+            .bindWith(plugin)
+
+        Events.subscribe(BlockBreakEvent::class.java)
+            .handler { event ->
+                interaction.invoke(event.player, event, "break blocks")
+            }
+            .bindWith(plugin)
+
+        Events.subscribe(BlockPlaceEvent::class.java)
+            .handler { event ->
+                interaction.invoke(event.player, event, "place blocks")
+            }
+            .bindWith(plugin)
+
+        Events.subscribe(EntityDamageByEntityEvent::class.java)
+            .handler { event ->
+                val damager = event.damager
+
+                if (damager is Player)
+                {
+                    interaction.invoke(
+                        damager, event, "hurt entities"
+                    )
+                }
+            }
+            .bindWith(plugin)
 
         Events
             .subscribe(
