@@ -63,7 +63,7 @@ object StaffChatChannelCommands : ScalaCommand()
     )
     {
         performStaffChannel(
-            player, StaffChatChannelType.Staff, message
+            player, StaffChatChannelType.Admin, message
         )
     }
 

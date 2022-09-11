@@ -38,7 +38,7 @@ object StaffNametagProvider : NametagProvider(
             "${ChatColor.GRAY}${
                 if (modMode) "[M] " else ""
             }${
-                if (vanished) "[V]" else ""
+                if (vanished) "[V] " else ""
             }",
             "", "zzz"
         )

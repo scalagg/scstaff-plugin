@@ -62,7 +62,7 @@ object ModModeHotbar
         preset.addSlot(
             8,
             StaticHotbarPresetEntry(
-                ItemBuilder(XMaterial.ORANGE_CARPET)
+                ItemBuilder(XMaterial.PAPER)
                     .name("${CC.GREEN}Staff List ${CC.GRAY}(Right-Click)")
                     .addToLore(
                         "${CC.WHITE}View all online staff."
