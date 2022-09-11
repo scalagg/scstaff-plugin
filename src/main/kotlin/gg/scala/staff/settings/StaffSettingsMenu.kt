@@ -49,6 +49,12 @@ class StaffSettingsMenu : Menu("Staff Settings")
                 "${CC.GREEN}Click to toggle!"
             )
             .toButton { _, _ ->
+                if (profile.staffChannel != null)
+                {
+                    player.sendMessage("${CC.RED}You cannot disable staff messages as you're in a staff channel!")
+                    return@toButton
+                }
+
                 profile.staffMessagesEnabled = !profile.staffMessagesEnabled
                 profile.save()
             }

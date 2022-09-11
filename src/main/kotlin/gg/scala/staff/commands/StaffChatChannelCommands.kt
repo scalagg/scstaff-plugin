@@ -76,6 +76,11 @@ object StaffChatChannelCommands : ScalaCommand()
                 "${ScalaStaffPlugin.PREFIX_PLUGIN} Something went terribly wrong while performing this command"
             )
 
+        if (!profile.staffMessagesEnabled)
+        {
+            throw ConditionFailedException("You cannot enter a staff channel if you have staff messages disabled.")
+        }
+
         if (message.isNullOrEmpty())
         {
             if (profile.staffChannel == type)

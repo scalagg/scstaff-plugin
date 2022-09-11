@@ -27,6 +27,11 @@ object StaffMessagesToggleCommand : ScalaCommand()
                 "${ScalaStaffPlugin.PREFIX_PLUGIN} Something went terrible wrong while performing this command"
             )
 
+        if (profile.staffChannel != null)
+        {
+            throw ConditionFailedException("You cannot disable staff messages as you're in a staff channel!")
+        }
+
         profile.staffMessagesEnabled = !profile.staffMessagesEnabled
 
         return profile.save()
