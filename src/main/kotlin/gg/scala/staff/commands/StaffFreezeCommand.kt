@@ -7,10 +7,10 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.Lemon
 import gg.scala.lemon.player.LemonPlayer
-import gg.scala.lemon.player.event.impl.PostFreezeEvent
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.moderation.frozen.FrozenPlayerHandler
+import gg.scala.staff.moderation.frozen.event.PostFreezeEvent
 import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.util.CC
 import org.bukkit.command.CommandSender
@@ -55,7 +55,7 @@ object StaffFreezeCommand : ScalaCommand()
                 )
             )
 
-            PostFreezeEvent(target.bukkitPlayer!!).dispatch()
+            PostFreezeEvent(target.bukkitPlayer!!).flow().subscribe()
 
             FrozenPlayerHandler.expirables[target.bukkitPlayer!!.uniqueId] = FrozenPlayerHandler.FrozenExpirable()
         }
