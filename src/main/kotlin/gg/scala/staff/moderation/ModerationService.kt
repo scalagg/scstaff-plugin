@@ -1,5 +1,6 @@
 package gg.scala.staff.moderation
 
+import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -146,12 +147,7 @@ object ModerationService
 
                 if (it.player.hasPermission(ScalaStaffPlugin.STAFF_NODE))
                 {
-                    val switched = connection.sync()
-                        .hget(
-                            "players:${it.player.uniqueId}", "switched"
-                        )
-
-                    if (switched == null || switched == "false")
+                    if ("hub" in ServerSync.getLocalGameServer().groups)
                     {
                         displayStaffInfo(it.player, profile, lemonPlayer)
                     }
