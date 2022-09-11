@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
  */
 @NametagProviderRegister
 object StaffNametagProvider : NametagProvider(
-    "staff", 1000
+    "staff", Int.MAX_VALUE - 30000
 )
 {
     /**

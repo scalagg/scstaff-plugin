@@ -43,7 +43,7 @@ object ChatSilenceCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName un-silenced the chat."
+            "$coloredName${CC.D_AQUA} un-silenced the chat."
         )
     }
 
@@ -69,7 +69,7 @@ object ChatSilenceCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName silenced the chat."
+            "$coloredName${CC.D_AQUA} silenced the chat."
         )
     }
 }

@@ -40,8 +40,7 @@ object StaffChatChannelService
                 val lemonPlayer = StaffProfileService.find(it)
                     ?: return@allowOnlyIf false
 
-                it.hasPermission("scstaff.channel.$channelName") &&
-                        !lemonPlayer.staffMessagesEnabled
+                it.hasPermission("scstaff.channel.$channelName") && lemonPlayer.staffMessagesEnabled
             }
             .override(1) {
                 StaffProfileService.find(it)?.staffChannel == channelType

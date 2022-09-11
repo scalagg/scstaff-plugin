@@ -22,17 +22,18 @@ class WarningMenu(
     {
         val buttons = mutableMapOf<Int, Button>()
 
-        for ((index, warning) in WarningHandler.allWarnings(this.target).values.withIndex())
+        for (warning in WarningHandler
+            .allWarnings(this.target).values
+            .sortedByDescending { it.timestamp })
         {
             buttons[buttons.size] = ItemBuilder
                 .of(Material.PAPER)
-                .name("${CC.B_GREEN}#${index + 1}")
+                .name("${CC.B_GREEN}${
+                    TimeUtil.formatIntoFullCalendarString(Date(warning.timestamp))
+                }")
                 .addToLore(
-                    "${CC.GRAY}${
-                        TimeUtil.formatIntoFullCalendarString(Date(warning.timestamp))
-                    }",
-                    "",
-                    "${CC.WHITE}Reason: ${CC.YELLOW}${warning.reason}"
+                    "${CC.WHITE}Reason: ${CC.YELLOW}${warning.reason}",
+                    "${CC.WHITE}Issuer: ${CC.GOLD}${warning.issuer.username()}",
                 )
                 .toButton()
         }

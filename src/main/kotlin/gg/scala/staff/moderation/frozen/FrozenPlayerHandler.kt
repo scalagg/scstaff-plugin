@@ -3,7 +3,6 @@ package gg.scala.staff.moderation.frozen
 import gg.scala.commons.annotations.runnables.Repeating
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
-import gg.scala.lemon.handler.frozen.FrozenPlayerHandler
 import gg.scala.lemon.listener.PlayerListener
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.other.Expirable
@@ -48,7 +47,7 @@ object FrozenPlayerHandler : Runnable
 
                     it.player.removeMetadata("frozen", PlayerListener.plugin)
 
-                    FrozenPlayerHandler.expirables.remove(it.player.uniqueId)
+                    expirables.remove(it.player.uniqueId)
 
                     if (config().frozenAutoBan)
                     {

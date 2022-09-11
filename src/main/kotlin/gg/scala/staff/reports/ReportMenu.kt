@@ -1,8 +1,5 @@
 package gg.scala.staff.reports
 
-import gg.scala.lemon.cooldown.CooldownHandler
-import gg.scala.lemon.cooldown.impl.ReportCooldown
-import gg.scala.lemon.util.QuickAccess
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
 import net.evilblock.cubed.util.CC
@@ -36,31 +33,7 @@ class ReportMenu(
                     "${CC.GREEN}Click to report!"
                 )
                 .toButton { _, _ ->
-
-
-                    QuickAccess.sendStaffMessageWithFlag(
-                        "${CC.YELLOW}${player.name}${CC.RED} has reported ${CC.YELLOW}${
-                            QuickAccess.coloredName(
-                                target
-                            )
-                        }${CC.RED} for ${CC.GOLD}${reportType.fancyName}${CC.RED}.",
-                        true, "reports-disabled"
-                    ).whenComplete { _, throwable ->
-                        if (throwable != null)
-                        {
-                            player.sendMessage("${CC.RED}Something went wrong while processing your report, try again later.")
-                        } else
-                        {
-                            val report = CooldownHandler.find(
-                                ReportCooldown::class.java
-                            )
-
-                            report?.addOrOverride(player)
-
-                            player.closeInventory()
-                            player.sendMessage("${CC.GREEN}Your report has been submitted.")
-                        }
-                    }
+                    ReportProcessor.processReport(player, target.uniqueId, reportType.fancyName)
                 }
         }
 

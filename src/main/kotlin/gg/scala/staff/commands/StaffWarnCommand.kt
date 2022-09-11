@@ -1,6 +1,7 @@
 package gg.scala.staff.commands
 
 import gg.scala.commons.acf.annotation.CommandAlias
+import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
@@ -20,7 +21,8 @@ import java.util.concurrent.CompletableFuture
 @AutoRegister
 object StaffWarnCommand : ScalaCommand()
 {
-    @CommandAlias("warnings")
+    @CommandCompletion("@players")
+    @CommandAlias("warnings|warns")
     @CommandPermission("scstaff.command.warn")
     fun onWarnings(
         player: ScalaPlayer, target: AsyncLemonPlayer
@@ -36,6 +38,7 @@ object StaffWarnCommand : ScalaCommand()
     }
 
     @CommandAlias("warn")
+    @CommandCompletion("@players")
     @CommandPermission("scstaff.command.warn")
     fun onWarn(
         sender: ScalaPlayer,

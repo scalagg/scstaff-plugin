@@ -8,6 +8,7 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.ScalaStaffPlugin
+import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -50,7 +51,7 @@ object ChatClearCommand : ScalaCommand()
                 "${CC.GREEN}The chat has been cleared by ${if (hidden) "staff" else coloredName}${CC.GREEN}."
             )
 
-            QuickAccess.sendStaffMessage(
+            StaffMessageStream.send(
                 "$coloredName${CC.D_AQUA} has cleared chat.", true
             )
         }

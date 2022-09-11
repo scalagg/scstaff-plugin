@@ -25,7 +25,7 @@ object ReportProcessor
     )
     {
         StaffMessageStream.send(
-            "${CC.YELLOW}${player.name}${CC.RED} has reported ${CC.YELLOW}${target.username()}${CC.RED} for ${CC.GOLD}$reason${CC.RED}.",
+            "${CC.YELLOW}${player.displayName}${CC.RED} has reported ${target.username()} for ${CC.GOLD}$reason${CC.RED}.",
             mustNotHaveMetadata = "reports-disabled"
         )
     }
