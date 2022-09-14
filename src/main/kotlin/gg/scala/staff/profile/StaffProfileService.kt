@@ -12,12 +12,6 @@ import java.util.*
 @Service
 object StaffProfileService : ProfileOrchestrator<StaffProfile>()
 {
-    @Configure
-    fun configure()
-    {
-        this.subscribe()
-    }
-
     override fun new(uniqueId: UUID) = StaffProfile(uniqueId)
     override fun type() = StaffProfile::class
 }
