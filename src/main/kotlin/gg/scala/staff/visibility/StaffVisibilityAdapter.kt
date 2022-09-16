@@ -41,7 +41,7 @@ object StaffVisibilityAdapter : VisibilityAdapter
 
         if (
             toRefresh.hasMetadata("vanished") &&
-            lemonPlayer.activeGrant!!.getRank().weight <
+            (lemonPlayer.activeGrant?.getRank()?.weight ?: 0) <
             toRefresh.getMetadata("vanish-power")[0].asInt()
         )
         {
