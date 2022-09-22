@@ -86,6 +86,7 @@ object StaffChatChannelCommands : ScalaCommand()
             if (profile.staffChannel == type)
             {
                 profile.staffChannel = null
+                profile.save()
 
                 player.sendMessage(
                     Component
@@ -96,6 +97,7 @@ object StaffChatChannelCommands : ScalaCommand()
             }
 
             profile.staffChannel = type
+            profile.save()
 
             player.sendMessage(
                 Component
