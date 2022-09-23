@@ -12,6 +12,8 @@ import gg.scala.staff.config
 import gg.scala.staff.reports.ReportMenu
 import gg.scala.staff.reports.ReportProcessor
 import net.evilblock.cubed.util.CC
+import org.apache.commons.lang3.time.DurationFormatUtils
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 /**
@@ -26,10 +28,8 @@ object ReportCommand : ScalaCommand()
     fun onReport(
         player: ScalaPlayer, target: LemonPlayer,
         @Optional message: String?
-    )
+    ): CompletableFuture<Void>
     {
-        val coolDowns = ReportProcessor.coolDowns
-
         if (target.bukkitPlayer!!.uniqueId == player.uniqueId)
         {
             throw ConditionFailedException("You're not allowed to report yourself.")
@@ -40,41 +40,40 @@ object ReportCommand : ScalaCommand()
             throw ConditionFailedException("You're unable to report ${CC.SEC}${target.getColoredName()}${CC.RED}.")
         }
 
-        if (!coolDowns.test(player.uniqueId))
-        {
-            val remaining = coolDowns
-                .remainingTime(
-                    player.uniqueId,
-                    TimeUnit.MILLISECONDS
-                ) / 1000.0F
+        return ReportProcessor
+            .getExpiration(player.bukkit())
+            .thenCompose {
+                if (it != null)
+                {
+                    player.sendMessage(
+                        "${CC.RED}You must wait ${CC.BOLD}${
+                            DurationFormatUtils.formatDurationWords(it, true, true)
+                        }${CC.RED} before reporting again."
+                    )
+                    return@thenCompose CompletableFuture.completedFuture(null)
+                }
 
-            player.sendMessage(
-                "${CC.RED}You must wait ${CC.BOLD}${
-                    "%.2f".format(remaining)
-                } second${
-                    if (remaining == 1.00F) "" else "s"
-                }${CC.RED} before reporting again."
-            )
-            return
-        }
+                if (config().reportsUiBased)
+                {
+                    ReportMenu(target.bukkitPlayer!!)
+                        .openMenu(player.bukkit())
+                    return@thenCompose CompletableFuture.completedFuture(null)
+                }
 
-        if (config().reportsUiBased)
-        {
-            ReportMenu(target.bukkitPlayer!!)
-                .openMenu(player.bukkit())
-            return
-        }
+                if (message.isNullOrEmpty())
+                {
+                    // wonky fr
+                    throw ConditionFailedException(
+                        "${CC.SEC}Usage: ${CC.PRI}/report ${CC.WHITE}<target> <message>"
+                    )
+                }
 
-        if (message.isNullOrEmpty())
-        {
-            // wonky fr
-            throw ConditionFailedException(
-                "${CC.SEC}Usage: ${CC.PRI}/report ${CC.WHITE}<target> <message>"
-            )
-        }
-
-        ReportProcessor.processReport(
-            player.bukkit(), target.uniqueId, message
-        )
+                ReportProcessor.processReport(
+                    player.bukkit(), target.uniqueId, message
+                )
+            }
+            .thenRun {
+                player.sendMessage("${CC.GREEN}We've received your report. This report will be looked into as soon as possible.")
+            }
     }
 }
