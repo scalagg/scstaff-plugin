@@ -47,7 +47,7 @@ object ReportCommand : ScalaCommand()
                 {
                     player.sendMessage(
                         "${CC.RED}You must wait ${CC.BOLD}${
-                            DurationFormatUtils.formatDurationWords(it, true, true)
+                            DurationFormatUtils.formatDurationWords(it - System.currentTimeMillis(), true, true)
                         }${CC.RED} before reporting again."
                     )
                     return@thenCompose CompletableFuture.completedFuture(null)
@@ -55,8 +55,7 @@ object ReportCommand : ScalaCommand()
 
                 if (config().reportsUiBased)
                 {
-                    ReportMenu(target.bukkitPlayer!!)
-                        .openMenu(player.bukkit())
+                    ReportMenu(target.bukkitPlayer!!).openMenu(player.bukkit())
                     return@thenCompose CompletableFuture.completedFuture(null)
                 }
 
@@ -68,12 +67,11 @@ object ReportCommand : ScalaCommand()
                     )
                 }
 
+                player.sendMessage("${CC.GREEN}We've received your report. This report will be looked into as soon as possible.")
+
                 ReportProcessor.processReport(
                     player.bukkit(), target.uniqueId, message
                 )
-            }
-            .thenRun {
-                player.sendMessage("${CC.GREEN}We've received your report. This report will be looked into as soon as possible.")
             }
     }
 }

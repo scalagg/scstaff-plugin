@@ -32,15 +32,17 @@ object ReportProcessor
         player: Player, target: UUID, reason: String
     ): CompletableFuture<Void>
     {
+        val millis = TimeUnit.SECONDS.toMillis(90L)
+        val expiration = System.currentTimeMillis() + millis
+
         return stream.async()
             .set(
                 "reports:expiration:${player.uniqueId}",
-                System.currentTimeMillis().toString()
+                expiration.toString()
             )
             .thenCompose {
                 stream.async().pexpire(
-                    "reports:expiration:${player.uniqueId}",
-                    TimeUnit.SECONDS.toMillis(90L)
+                    "reports:expiration:${player.uniqueId}", millis
                 )
             }
             .toCompletableFuture()
