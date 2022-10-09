@@ -3,12 +3,15 @@ package gg.scala.staff.network
 import gg.scala.commons.agnostic.sync.server.ServerContainer
 import gg.scala.commons.agnostic.sync.server.impl.GameServer
 import gg.scala.commons.annotations.runnables.Repeating
+import gg.scala.flavor.inject.Inject
 import gg.scala.lemon.player.rank.Rank
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.ScalaStaffPlugin
+import io.lettuce.core.RedisException
 import me.lucko.helper.promise.ThreadContext
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.logging.Level
 
 /**
  * Maps all online staff on the desired
@@ -31,9 +34,24 @@ object NetworkOnlineStaffUpdates : Runnable
         val server: String
     )
 
+    @Inject
+    lateinit var plugin: ScalaStaffPlugin
+
     val staffMembers = CopyOnWriteArrayList<StaffMember>()
 
     override fun run()
+    {
+        kotlin.runCatching {
+            runInternal()
+        }.onFailure {
+            if (it !is RedisException)
+            {
+                plugin.logger.log(Level.SEVERE, "Failed to update staff", it)
+            }
+        }
+    }
+
+    private fun runInternal()
     {
         val servers = ServerContainer
             .allServers<GameServer>()
