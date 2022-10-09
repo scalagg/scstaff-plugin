@@ -14,6 +14,7 @@ import org.bukkit.ChatColor
  */
 @Plugin(
     name = "ScStaff",
+    apiVersion = "1.19",
     depends = [
         PluginDependency("Lemon"),
         PluginDependency("scala-commons"),
