@@ -161,7 +161,9 @@ object ModerationService
                             "${CC.B_SEC}You've been automatically put into vanish."
                         )
 
-                        enterVanish(it.player, lemonPlayer.activeGrant!!.getRank().weight)
+                        lemonPlayer.activeGrant?.apply {
+                            enterVanish(it.player, this.getRank().weight)
+                        }
                     }
                 }
 
