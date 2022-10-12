@@ -20,8 +20,8 @@ import org.bukkit.ChatColor
     description = ""
 )
 
-@PluginAuthor("%author%")
-@PluginWebsite("%website%")
+@PluginAuthor("Scala")
+@PluginWebsite("https://scala.gg")
 
 @PluginDependency("Lemon")
 @PluginDependency("scala-commons")
