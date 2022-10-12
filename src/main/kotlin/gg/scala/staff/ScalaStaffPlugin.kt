@@ -16,8 +16,7 @@ import org.bukkit.ChatColor
  */
 @Plugin(
     name = "ScStaff",
-    version = "%remote%/%branch%/%id%",
-    description = ""
+    version = "%remote%/%branch%/%id%"
 )
 
 @PluginAuthor("Scala")
