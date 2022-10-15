@@ -20,7 +20,10 @@ data class StaffProfile(
     var staffReportNotificationsEnabled = true
 
     var staffMessagesEnabled = true
+
     var staffVisibilityEnabled = true
+    var vanishVisibilityEnabled = true
+    
     var staffAutoVanishEnabled = false
 
     override fun save() =

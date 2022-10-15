@@ -14,4 +14,16 @@ object StaffProfileService : ProfileOrchestrator<StaffProfile>()
 {
     override fun new(uniqueId: UUID) = StaffProfile(uniqueId)
     override fun type() = StaffProfile::class
+
+    override fun postLoad(uniqueId: UUID)
+    {
+        val profile = find(uniqueId)
+            ?: return
+
+        kotlin.runCatching {
+            profile.vanishVisibilityEnabled
+        }.onFailure {
+            profile.vanishVisibilityEnabled = true
+        }
+    }
 }

@@ -28,9 +28,6 @@ import org.bukkit.ChatColor
 @PluginDependency("cloudsync", soft = true)
 class ScalaStaffPlugin : ExtendedScalaPlugin()
 {
-    @Inject
-    lateinit var config: ScalaStaffConfig
-
     companion object
     {
         @JvmStatic

@@ -33,6 +33,7 @@ object StaffVisibilityAdapter : VisibilityAdapter
 
         if (
             !profilePlayer.staffVisibilityEnabled &&
+            lemonPlayer.hasPermission(ScalaStaffPlugin.STAFF_NODE) &&
             lemonPlayerTarget.hasPermission(ScalaStaffPlugin.STAFF_NODE)
         )
         {
@@ -43,6 +44,15 @@ object StaffVisibilityAdapter : VisibilityAdapter
             toRefresh.hasMetadata("vanished") &&
             (lemonPlayer.activeGrant?.getRank()?.weight ?: 0) <
             toRefresh.getMetadata("vanish-power")[0].asInt()
+        )
+        {
+            return VisibilityAction.HIDE
+        }
+
+        if (
+            !profilePlayer.vanishVisibilityEnabled &&
+            toRefresh.hasMetadata("vanished") &&
+            lemonPlayer.hasPermission(ScalaStaffPlugin.STAFF_NODE)
         )
         {
             return VisibilityAction.HIDE

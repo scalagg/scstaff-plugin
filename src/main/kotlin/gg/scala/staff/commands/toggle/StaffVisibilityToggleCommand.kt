@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture
 @AutoRegister
 object StaffVisibilityToggleCommand : ScalaCommand()
 {
-    @CommandAlias("togglestaffvisibility|tsv|staffvisibility")
+    @CommandAlias("togglestaffvisibility|tsv|staffvisibility|showstaff|hidestaff")
     @CommandPermission(ScalaStaffPlugin.STAFF_NODE)
     fun onStaffVisibility(player: ScalaPlayer): CompletableFuture<Void>
     {
@@ -40,6 +40,32 @@ object StaffVisibilityToggleCommand : ScalaCommand()
                     } else
                     {
                         "${ChatColor.RED}You are no longer viewing staff."
+                    }
+                )
+            }
+    }
+
+    @CommandAlias("togglevanishvisibility|tvv|vanishedvisibility|showvanished|hidevanished")
+    @CommandPermission(ScalaStaffPlugin.STAFF_NODE)
+    fun onVanishVisibility(player: ScalaPlayer): CompletableFuture<Void>
+    {
+        val profile = StaffProfileService.find(player.uniqueId)
+            ?: throw ConditionFailedException(
+                "${ScalaStaffPlugin.PREFIX_PLUGIN} Something went terrible wrong while performing this command"
+            )
+
+        profile.vanishVisibilityEnabled = !profile.vanishVisibilityEnabled
+        VisibilityHandler.updateAllTo(player.bukkit())
+
+        return profile.save()
+            .thenRun {
+                player.sendMessage(
+                    if (profile.vanishVisibilityEnabled)
+                    {
+                        "${ChatColor.GREEN}You are now viewing vanished players."
+                    } else
+                    {
+                        "${ChatColor.RED}You are no longer viewing vanished players."
                     }
                 )
             }
