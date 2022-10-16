@@ -27,6 +27,8 @@ import org.bukkit.ChatColor
 
 @PluginDependency("Lemon")
 @PluginDependency("scala-commons")
+
+@PluginDependency("ScBasics", soft = true)
 @PluginDependency("cloudsync", soft = true)
 class ScalaStaffPlugin : ExtendedScalaPlugin()
 {
