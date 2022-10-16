@@ -7,6 +7,8 @@ import gg.scala.commons.core.plugin.PluginAuthor
 import gg.scala.commons.core.plugin.PluginDependency
 import gg.scala.commons.core.plugin.PluginWebsite
 import gg.scala.flavor.inject.Inject
+import gg.scala.staff.provider.SettingProvider
+import gg.scala.staff.provider.impl.LemonSettingProvider
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Constants
 import org.bukkit.ChatColor
@@ -28,6 +30,8 @@ import org.bukkit.ChatColor
 @PluginDependency("cloudsync", soft = true)
 class ScalaStaffPlugin : ExtendedScalaPlugin()
 {
+    var settingProvider: SettingProvider = LemonSettingProvider
+
     companion object
     {
         @JvmStatic

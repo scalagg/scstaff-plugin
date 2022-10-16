@@ -8,7 +8,6 @@ import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
-import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.profile.StaffProfileService
 import org.bukkit.Bukkit
@@ -70,10 +69,6 @@ object StaffMessageStream
             }"
 
             Bukkit.getOnlinePlayers().filter {
-                val lemonPlayer = PlayerHandler
-                    .find(it.uniqueId)
-                    ?: return@filter false
-
                 val profile = StaffProfileService.find(it)
                     ?: return@filter false
 
@@ -82,7 +77,7 @@ object StaffMessageStream
 
                 val flag = if (additionalFlag == null) true else
                     if (additionalFlag == "reports-disabled") profile.staffReportNotificationsEnabled else
-                        !lemonPlayer.hasMetadata(additionalFlag)
+                        !plugin.settingProvider.provideSetting(it, additionalFlag)
 
                 ((additionalFlag == null || additionalFlag == "null") || flag) && ableToReceive
             }.forEach {
