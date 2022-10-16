@@ -24,7 +24,7 @@ object StaffSettingsCategory : SettingCategory
 {
     override val items = listOf(
         SettingContainer.buildEntry {
-            id = "messages"
+            id = "security-notifications"
             displayName = "Security notifications"
 
             clazz = StateSettingValue::class.java
@@ -42,7 +42,7 @@ object StaffSettingsCategory : SettingCategory
             item = ItemBuilder.of(Material.DIODE)
         },
         SettingContainer.buildEntry {
-            id = "messages"
+            id = "vpn-alerts-disabled"
             displayName = "VPN logins"
 
             clazz = StateSettingValue::class.java
