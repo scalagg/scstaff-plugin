@@ -29,6 +29,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityTargetEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -109,6 +110,16 @@ object ModerationService
         Events.subscribe(BlockBreakEvent::class.java)
             .handler { event ->
                 interaction.invoke(event.player, event, "break blocks")
+            }
+            .bindWith(plugin)
+
+        Events
+            .subscribe(PlayerDropItemEvent::class.java)
+            .filter {
+                it.player.hasMetadata("mod-mode")
+            }
+            .handler { event ->
+                event.isCancelled = true
             }
             .bindWith(plugin)
 

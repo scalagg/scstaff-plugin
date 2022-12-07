@@ -1,6 +1,5 @@
 package gg.scala.staff.settings
 
-import gg.scala.basics.plugin.conversation.settings.MessagingSettingValue
 import gg.scala.basics.plugin.settings.SettingCategory
 import gg.scala.basics.plugin.settings.SettingContainer
 import gg.scala.basics.plugin.settings.defaults.values.StateSettingValue
