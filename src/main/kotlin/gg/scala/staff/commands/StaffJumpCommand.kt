@@ -40,7 +40,7 @@ object StaffJumpCommand : ScalaCommand()
                         .fetchColoredName(lemonPlayer.uniqueId)
 
                     StaffMessageStream.send(
-                        "${QuickAccess.coloredName(player)} ${CC.D_AQUA}jumped to ${CC.AQUA}${coloredName}${CC.D_AQUA}.",
+                        "${QuickAccess.coloredName(player, ignoreMinequest = true)} ${CC.D_AQUA}jumped to ${CC.AQUA}${coloredName}${CC.D_AQUA}.",
                         includeOrigin = false
                     )
 

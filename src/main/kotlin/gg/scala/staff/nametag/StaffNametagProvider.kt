@@ -28,18 +28,16 @@ object StaffNametagProvider : NametagProvider(
         toRefresh: Player, refreshFor: Player
     ): NametagInfo?
     {
-        val vanished = toRefresh.hasMetadata("vanished")
-        val modMode = toRefresh.hasMetadata("mod-mode")
+        val vanished = toRefresh
+            .hasMetadata("vanished")
 
-        if (!vanished && !modMode)
+        if (!vanished)
+        {
             return null
+        }
 
         return createNametag(
-            "${ChatColor.GRAY}${
-                if (modMode) "[M] " else ""
-            }${
-                if (vanished) "[V] " else ""
-            }",
+            "${ChatColor.GRAY}[V] ",
             "", "zzz"
         )
     }

@@ -48,18 +48,6 @@ object ModModeHotbar
         )
 
         preset.addSlot(
-            7,
-            StaticHotbarPresetEntry(
-                ItemBuilder(XMaterial.ORANGE_CARPET)
-                    .name("${CC.GREEN}Better View ${CC.GRAY}(Right-Click)")
-                    .addToLore(
-                        "${CC.WHITE}Hold this item to hide",
-                        "${CC.WHITE}your arm."
-                    )
-            )
-        )
-
-        preset.addSlot(
             8,
             StaticHotbarPresetEntry(
                 ItemBuilder(XMaterial.PAPER)

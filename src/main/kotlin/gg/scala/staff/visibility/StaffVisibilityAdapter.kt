@@ -19,6 +19,11 @@ object StaffVisibilityAdapter : VisibilityAdapter
         toRefresh: Player, refreshFor: Player
     ): VisibilityAction
     {
+        if (toRefresh.uniqueId == refreshFor.uniqueId)
+        {
+            return VisibilityAction.NEUTRAL
+        }
+
         val lemonPlayer = PlayerHandler
             .find(refreshFor.uniqueId)
             ?: return VisibilityAction.NEUTRAL
