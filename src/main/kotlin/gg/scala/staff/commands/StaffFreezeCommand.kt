@@ -13,6 +13,7 @@ import gg.scala.staff.moderation.frozen.FrozenPlayerHandler
 import gg.scala.staff.moderation.frozen.event.PostFreezeEvent
 import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.command.CommandSender
 import org.bukkit.metadata.FixedMetadataValue
 
@@ -55,7 +56,9 @@ object StaffFreezeCommand : ScalaCommand()
                 )
             )
 
-            PostFreezeEvent(target.bukkitPlayer!!).flow().subscribe()
+            Tasks.async {
+                PostFreezeEvent(target.bukkitPlayer!!).flow().subscribe()
+            }
 
             FrozenPlayerHandler.expirables[target.bukkitPlayer!!.uniqueId] = FrozenPlayerHandler.FrozenExpirable()
         }
