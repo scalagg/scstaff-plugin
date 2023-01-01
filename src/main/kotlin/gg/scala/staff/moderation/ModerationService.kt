@@ -35,6 +35,8 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.metadata.FixedMetadataValue
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * @author GrowlyX
@@ -74,8 +76,9 @@ object ModerationService
     @Configure
     fun configure()
     {
-        ScoreboardHandler.scoreboardOverride =
-            ModModeScoreboardOverride
+        ScoreboardHandler.scoreboardOverride = ModModeScoreboardOverride
+
+        val scheduler = Executors.newSingleThreadScheduledExecutor()
 
         val interaction: (Player, Cancellable, String) -> Unit = { player, event, action ->
             if (player.hasMetadata("mod-mode"))
@@ -160,7 +163,9 @@ object ModerationService
                 {
                     if ("hub" in ServerSync.getLocalGameServer().groups)
                     {
-                        displayStaffInfo(it.player, profile, lemonPlayer)
+                        scheduler.schedule({
+                            displayStaffInfo(it.player, profile, lemonPlayer)
+                        },25L, TimeUnit.MILLISECONDS)
                     }
 
                     if (
