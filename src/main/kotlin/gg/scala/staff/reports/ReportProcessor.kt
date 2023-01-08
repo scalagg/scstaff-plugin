@@ -20,8 +20,11 @@ object ReportProcessor
 
     fun getExpiration(player: Player): CompletableFuture<Long?>
     {
-        return this.stream.async()
-            .get("reports:expiration:${player.uniqueId}")
+        return CompletableFuture
+            .supplyAsync {
+                this.stream.sync()
+                    .get("reports:expiration:${player.uniqueId}")
+            }
             .thenApply {
                 it?.toLongOrNull()
             }
@@ -35,13 +38,16 @@ object ReportProcessor
         val millis = TimeUnit.SECONDS.toMillis(90L)
         val expiration = System.currentTimeMillis() + millis
 
-        return stream.async()
-            .set(
-                "reports:expiration:${player.uniqueId}",
-                expiration.toString()
-            )
-            .thenCompose {
-                stream.async().pexpire(
+        return CompletableFuture
+            .runAsync {
+                stream.sync()
+                    .set(
+                        "reports:expiration:${player.uniqueId}",
+                        expiration.toString()
+                    )
+            }
+            .thenRun {
+                stream.sync().pexpire(
                     "reports:expiration:${player.uniqueId}", millis
                 )
             }

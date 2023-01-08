@@ -33,7 +33,9 @@ class ReportMenu(
                     "${CC.GREEN}Click to report!"
                 )
                 .toButton { _, _ ->
+                    player.closeInventory()
                     ReportProcessor.processReport(player, target.uniqueId, reportType.fancyName)
+                    player.sendMessage("${CC.GREEN}Your report has been submitted!")
                 }
         }
 
