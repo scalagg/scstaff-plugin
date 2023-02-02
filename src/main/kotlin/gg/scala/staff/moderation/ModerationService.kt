@@ -1,6 +1,7 @@
 package gg.scala.staff.moderation
 
 import gg.scala.commons.agnostic.sync.ServerSync
+import gg.scala.commons.event.EventQuadState
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -9,6 +10,7 @@ import gg.scala.lemon.menu.modmode.InspectionMenu
 import gg.scala.lemon.player.LemonPlayer
 import gg.scala.lemon.util.ClientUtil
 import gg.scala.staff.ScalaStaffPlugin
+import gg.scala.staff.moderation.frozen.event.ModModeEnterEvent
 import gg.scala.staff.moderation.hotbar.ModModeHotbar
 import gg.scala.staff.moderation.scoreboard.ModModeScoreboardOverride
 import gg.scala.staff.profile.StaffProfile
@@ -247,6 +249,13 @@ object ModerationService
 
     fun enterModMode(player: Player)
     {
+        val enter = ModModeEnterEvent(player)
+
+        if (enter.flow().blockingFirst() == EventQuadState.CANCELLED)
+        {
+            return
+        }
+
         snapshots[player.uniqueId] = PlayerSnapshot(player)
         player.inventory.clear()
 
