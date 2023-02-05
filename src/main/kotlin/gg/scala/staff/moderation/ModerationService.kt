@@ -250,24 +250,23 @@ object ModerationService
     fun enterModMode(player: Player)
     {
         val enter = ModModeEnterEvent(player)
+        enter.callEvent()
 
-        enter.flow().subscribe {
-            if (it != EventQuadState.CANCELLED)
-            {
-                snapshots[player.uniqueId] = PlayerSnapshot(player)
-                player.inventory.clear()
+        if (!enter.isCancelled)
+        {
+            snapshots[player.uniqueId] = PlayerSnapshot(player)
+            player.inventory.clear()
 
-                player.setMetadata(
-                    "mod-mode", FixedMetadataValue(plugin, true)
-                )
+            player.setMetadata(
+                "mod-mode", FixedMetadataValue(plugin, true)
+            )
 
-                ModModeHotbar.hotbar.applyToPlayer(player)
-                NametagHandler.reloadPlayer(player)
+            ModModeHotbar.hotbar.applyToPlayer(player)
+            NametagHandler.reloadPlayer(player)
 
-                player.sendMessage(
-                    "${ScalaStaffPlugin.PREFIX} ${CC.SEC}You are now in mod mode."
-                )
-            }
+            player.sendMessage(
+                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}You are now in mod mode."
+            )
         }
     }
 
