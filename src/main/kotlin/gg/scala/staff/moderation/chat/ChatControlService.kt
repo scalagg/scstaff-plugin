@@ -83,7 +83,7 @@ object ChatControlService
 
                 if (
                     !CooldownHandler.notifyAndContinue(
-                        ChatCooldown::class.java, event.player
+                        ChatCooldown::class.java, event.player, "talking"
                     )
                 )
                 {
