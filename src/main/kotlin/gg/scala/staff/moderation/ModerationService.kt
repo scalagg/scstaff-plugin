@@ -5,6 +5,8 @@ import gg.scala.commons.event.EventQuadState
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import gg.scala.lemon.Lemon
+import gg.scala.lemon.adapter.client.PlayerClientAdapter
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.menu.modmode.InspectionMenu
 import gg.scala.lemon.player.LemonPlayer
@@ -147,6 +149,17 @@ object ModerationService
             }
             .bindWith(plugin)
 
+        fun handleApplicableClient(
+            player: Player, lambda: (PlayerClientAdapter) -> Unit
+        ) {
+            val adapter = Lemon.instance.clientAdapters
+                .firstOrNull { it.shouldHandle(player) }
+
+            if (adapter != null) {
+                lambda.invoke(adapter)
+            }
+        }
+
         Events
             .subscribe(
                 PlayerJoinEvent::class.java,
@@ -187,7 +200,7 @@ object ModerationService
 
                 if (it.player.hasPermission("scstaff.client.staffmodules"))
                 {
-                    ClientUtil.handleApplicableClient(it.player) { client ->
+                    handleApplicableClient(it.player) { client ->
                         client.enableStaffModules(it.player)
 
                         it.player.sendMessage(
