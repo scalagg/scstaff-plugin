@@ -1,7 +1,6 @@
 package gg.scala.staff.moderation
 
 import gg.scala.commons.agnostic.sync.ServerSync
-import gg.scala.commons.event.EventQuadState
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -10,7 +9,6 @@ import gg.scala.lemon.adapter.client.PlayerClientAdapter
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.menu.modmode.InspectionMenu
 import gg.scala.lemon.player.LemonPlayer
-import gg.scala.lemon.util.ClientUtil
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.moderation.frozen.event.ModModeEnterEvent
 import gg.scala.staff.moderation.hotbar.ModModeHotbar
