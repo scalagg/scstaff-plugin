@@ -22,7 +22,7 @@ class StaffChatChannelComposite(
     override fun identifier() = type.name.lowercase()
 
     override fun format(
-        sender: UUID, receiver: Player,
+        sender: UUID, receiver: Player?,
         message: String, server: String, rank: Rank
     ): TextComponent
     {
