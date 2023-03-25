@@ -52,7 +52,7 @@ object ChatSlowdownCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName slowed the chat to $amount${gsdMsgExtension()}."
+            "$coloredName${CC.D_AQUA} slowed the chat to ${CC.AQUA}$amount${CC.D_AQUA}${gsdMsgExtension()}."
         )
     }
 
@@ -78,7 +78,7 @@ object ChatSlowdownCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName un-slowed the chat${gsdMsgExtension()}."
+            "$coloredName${CC.D_AQUA} un-slowed the chat${gsdMsgExtension()}."
         )
     }
 }
