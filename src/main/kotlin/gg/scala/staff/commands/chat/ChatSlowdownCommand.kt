@@ -9,6 +9,7 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.Lemon
 import gg.scala.lemon.util.QuickAccess
+import gg.scala.staff.commands.gsdMsgExtension
 import gg.scala.staff.moderation.chat.ChatControlService
 import gg.scala.staff.moderation.chat.ChatControlSyncService
 import gg.scala.staff.stream.StaffMessageStream
@@ -51,7 +52,7 @@ object ChatSlowdownCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName slowed the chat to $amount."
+            "$coloredName slowed the chat to $amount${gsdMsgExtension()}."
         )
     }
 
@@ -77,7 +78,7 @@ object ChatSlowdownCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName un-slowed the chat."
+            "$coloredName un-slowed the chat${gsdMsgExtension()}."
         )
     }
 }

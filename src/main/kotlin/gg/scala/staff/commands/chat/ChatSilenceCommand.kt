@@ -5,9 +5,12 @@ import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Optional
 import gg.scala.commons.acf.annotation.Syntax
+import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
+import gg.scala.lemon.Lemon
 import gg.scala.lemon.util.QuickAccess
+import gg.scala.staff.commands.gsdMsgExtension
 import gg.scala.staff.moderation.chat.ChatControlService
 import gg.scala.staff.moderation.chat.ChatControlSyncService
 import gg.scala.staff.stream.StaffMessageStream
@@ -44,7 +47,7 @@ object ChatSilenceCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName${CC.D_AQUA} un-silenced the chat."
+            "$coloredName${CC.D_AQUA} un-silenced the chat${gsdMsgExtension()}."
         )
     }
 
@@ -70,7 +73,7 @@ object ChatSilenceCommand : ScalaCommand()
         )
 
         StaffMessageStream.send(
-            "$coloredName${CC.D_AQUA} silenced the chat."
+            "$coloredName${CC.D_AQUA} silenced the chat${gsdMsgExtension()}."
         )
     }
 }
