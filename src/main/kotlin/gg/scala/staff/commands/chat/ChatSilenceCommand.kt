@@ -9,6 +9,7 @@ import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.moderation.chat.ChatControlService
+import gg.scala.staff.moderation.chat.ChatControlSyncService
 import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
@@ -28,12 +29,12 @@ object ChatSilenceCommand : ScalaCommand()
         sender: CommandSender, @Optional hiddenString: String?
     )
     {
-        if (!ChatControlService.chatSilenced)
+        if (!ChatControlSyncService.cached().chatSilenced)
         {
             throw ConditionFailedException("The chat is not silenced. Use ${CC.BOLD}/mutechat${CC.RED} to mute the chat!")
         }
 
-        ChatControlService.chatSilenced = false
+        ChatControlService.toggleChatSilence()
 
         val coloredName = QuickAccess.nameOrConsole(sender)
         val hidden = hiddenString != null && hiddenString == "-h"
@@ -54,12 +55,12 @@ object ChatSilenceCommand : ScalaCommand()
         sender: CommandSender, @Optional hiddenString: String?
     )
     {
-        if (ChatControlService.chatSilenced)
+        if (ChatControlSyncService.cached().chatSilenced)
         {
             throw ConditionFailedException("The chat is silenced. Use ${CC.BOLD}/unmutechat${CC.RED} to unmute the chat!")
         }
 
-        ChatControlService.chatSilenced = true
+        ChatControlService.toggleChatSilence()
 
         val coloredName = QuickAccess.nameOrConsole(sender)
         val hidden = hiddenString != null && hiddenString == "-h"

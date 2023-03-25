@@ -7,8 +7,10 @@ import gg.scala.commons.acf.annotation.Optional
 import gg.scala.commons.acf.annotation.Syntax
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
+import gg.scala.lemon.Lemon
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.moderation.chat.ChatControlService
+import gg.scala.staff.moderation.chat.ChatControlSyncService
 import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
@@ -28,7 +30,7 @@ object ChatSlowdownCommand : ScalaCommand()
         sender: CommandSender, seconds: Int, @Optional hiddenString: String?
     )
     {
-        if (ChatControlService.chatSlowdown > 0)
+        if (ChatControlSyncService.cached().chatSlowDown > 0)
         {
             throw ConditionFailedException("The chat is already slowed. Use ${CC.BOLD}/unslowchat${CC.RED} to un-slow the chat!")
         }
@@ -38,7 +40,7 @@ object ChatSlowdownCommand : ScalaCommand()
             throw ConditionFailedException("You must choose a number greater than ${CC.BOLD}0 seconds${CC.RED}!")
         }
 
-        ChatControlService.chatSlowdown = seconds
+        ChatControlService.updateChatSlowDown(seconds)
 
         val coloredName = QuickAccess.nameOrConsole(sender)
         val hidden = hiddenString != null && hiddenString == "-h"
@@ -60,12 +62,12 @@ object ChatSlowdownCommand : ScalaCommand()
         sender: CommandSender, @Optional hiddenString: String?
     )
     {
-        if (ChatControlService.chatSlowdown <= 0)
+        if (ChatControlSyncService.cached().chatSlowDown <= 0)
         {
             throw ConditionFailedException("The chat is not yet slowed. Use ${CC.BOLD}/slowchat${CC.RED} to slow the chat!")
         }
 
-        ChatControlService.chatSlowdown = 0
+        ChatControlService.updateChatSlowDown(0)
 
         val coloredName = QuickAccess.nameOrConsole(sender)
         val hidden = hiddenString != null && hiddenString == "-h"

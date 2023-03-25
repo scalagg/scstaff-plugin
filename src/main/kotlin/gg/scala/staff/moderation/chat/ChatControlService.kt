@@ -2,6 +2,7 @@ package gg.scala.staff.moderation.chat
 
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import gg.scala.lemon.Lemon
 import gg.scala.lemon.cooldown.CooldownHandler
 import gg.scala.lemon.cooldown.type.PlayerCooldown
 import gg.scala.lemon.listener.PlayerListener
@@ -15,9 +16,6 @@ import org.bukkit.entity.Player
 @Service
 object ChatControlService
 {
-    var chatSilenced = false
-    var chatSlowdown = 0
-
     object ChatCooldown : PlayerCooldown("chat")
     {
         override fun durationFor(player: Player) =
@@ -28,7 +26,29 @@ object ChatControlService
     object SlowChatCooldown : PlayerCooldown("slow-chat")
     {
         override fun durationFor(player: Player) =
-            chatSlowdown * 1_000L
+            ChatControlSyncService.cached().chatSlowDown * 1_000L
+    }
+
+    fun toggleChatSilence()
+    {
+        val cached = ChatControlSyncService.cached()
+        cached.chatSilenced = !cached.chatSilenced
+
+        if (Lemon.instance.settings.defaultChatGsd)
+        {
+            ChatControlSyncService.sync(cached)
+        }
+    }
+
+    fun updateChatSlowDown(slowDown: Int)
+    {
+        val cached = ChatControlSyncService.cached()
+        cached.chatSlowDown = slowDown
+
+        if (Lemon.instance.settings.defaultChatGsd)
+        {
+            ChatControlSyncService.sync(cached)
+        }
     }
 
     @Configure
@@ -40,7 +60,7 @@ object ChatControlService
 
         PlayerListener.defaultChannelProtection = context@{ event ->
             if (
-                chatSilenced &&
+                ChatControlSyncService.cached().chatSilenced &&
                 !event.player.hasPermission("scstaff.chat.silence.bypass")
             )
             {
@@ -52,7 +72,7 @@ object ChatControlService
             }
 
             if (
-                chatSlowdown != 0 &&
+                ChatControlSyncService.cached().chatSlowDown != 0 &&
                 !event.player.hasPermission("scstaff.chat.slowdown.bypass")
             )
             {
