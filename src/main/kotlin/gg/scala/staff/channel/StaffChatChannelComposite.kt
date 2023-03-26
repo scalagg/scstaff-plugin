@@ -19,6 +19,12 @@ class StaffChatChannelComposite(
     private val type: StaffChatChannelType
 ): ChatChannelComposite
 {
+    private val urlExtractingDeserializer = LegacyComponentSerializer
+        .legacySection()
+        .toBuilder()
+        .extractUrls()
+        .build()
+
     override fun identifier() = type.name.lowercase()
 
     override fun format(
@@ -36,7 +42,7 @@ class StaffChatChannelComposite(
                     .color(NamedTextColor.DARK_AQUA)
             )
             .append(
-                LegacyComponentSerializer.legacySection()
+                urlExtractingDeserializer
                     .deserialize(
                         "${rank.color}$username${ChatColor.GRAY}: ${ChatColor.AQUA}${message}"
                     )
