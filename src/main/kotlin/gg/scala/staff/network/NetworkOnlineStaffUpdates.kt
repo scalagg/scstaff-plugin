@@ -20,7 +20,7 @@ import java.util.logging.Level
  * Online staff are refreshed every second.
  *
  * TODO: We may want to cache prominent ranks in
- *  Redis to avoid querying the database this many times
+ *  Redis to avoid querying the database too many times
  *
  * @author GrowlyX
  * @since 9/8/2022

@@ -1,5 +1,6 @@
 package gg.scala.staff.commands
 
+import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
@@ -43,6 +44,11 @@ object StaffFreezeCommand : ScalaCommand()
             FrozenPlayerHandler.expirables.remove(target.bukkitPlayer!!.uniqueId)
         } else
         {
+            if (target.hasPermission(ScalaStaffPlugin.STAFF_NODE))
+            {
+                throw ConditionFailedException("You are unable to freeze staff members!")
+            }
+
             StaffMessageStream.send(
                 "${CC.AQUA}${QuickAccess.nameOrConsole(sender)}${CC.D_AQUA} has frozen ${QuickAccess.coloredName(target.bukkitPlayer!!)}${CC.D_AQUA}."
             )
