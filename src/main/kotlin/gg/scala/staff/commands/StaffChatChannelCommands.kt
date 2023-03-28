@@ -45,7 +45,7 @@ object StaffChatChannelCommands : ScalaCommand()
         )
     }
 
-    @CommandAlias("staffchat|sc")
+    @CommandAlias("staffchat|sc|s")
     @CommandPermission("scstaff.channel.staff")
     fun onStaffChat(
         player: ScalaPlayer, @Optional message: String?
