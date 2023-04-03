@@ -3,6 +3,7 @@ package gg.scala.staff.reports
 import gg.scala.flavor.service.Service
 import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.stream.StaffMessageStream
+import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 import java.util.*
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit
 @Service // eagerly load our redis stream
 object ReportProcessor
 {
-    val stream = StaffMessageStream.aware.internal().connect()!!
+    val stream = ScalaCommonsSpigot.instance.kvConnection
 
     fun getExpiration(player: Player): CompletableFuture<Long?>
     {

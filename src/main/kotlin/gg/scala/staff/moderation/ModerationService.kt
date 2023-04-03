@@ -72,9 +72,6 @@ object ModerationService
         ))
     }
 
-    val connection = StaffMessageStream
-        .aware.internal().connect()!!
-
     @Configure
     fun configure()
     {
