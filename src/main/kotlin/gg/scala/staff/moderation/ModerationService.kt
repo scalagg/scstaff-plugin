@@ -9,6 +9,7 @@ import gg.scala.lemon.adapter.client.PlayerClientAdapter
 import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.menu.modmode.InspectionMenu
 import gg.scala.lemon.player.LemonPlayer
+import gg.scala.lemon.redirection.expectation.PlayerJoinWithExpectationEvent
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.moderation.frozen.event.ModModeEnterEvent
 import gg.scala.staff.moderation.hotbar.ModModeHotbar
@@ -22,6 +23,7 @@ import net.evilblock.cubed.scoreboard.ScoreboardHandler
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.player.PlayerSnapshot
 import net.evilblock.cubed.visibility.VisibilityHandler
+import org.bukkit.Bukkit
 import org.bukkit.entity.ExperienceOrb
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -55,21 +57,23 @@ object ModerationService
 
     private fun displayStaffInfo(player: Player, profile: StaffProfile, lemonPlayer: LemonPlayer)
     {
-        player.sendMessage(arrayOf(
-            "${CC.B_PRI}Staff Information:",
-            "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Channel: ${
-                if (profile.staffChannel == null) "${CC.RED}None" else "${profile.staffChannel!!.chatColor}${profile.staffChannel!!.name}"
-            }",
-            "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Messages: ${
-                if (profile.staffMessagesEnabled) "${CC.GREEN}Shown" else "${CC.RED}Hidden"
-            } ${CC.GRAY}(/tsm)",
-            "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Reports: ${
-                if (profile.staffReportNotificationsEnabled) "${CC.GREEN}Shown" else "${CC.RED}Hidden"
-            } ${CC.GRAY}(/trm)",
-            "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Filter: ${
-                if (!lemonPlayer.hasMetadata("filter-disabled")) "${CC.GREEN}Shown" else "${CC.RED}Hidden"
-            } ${CC.GRAY}(/tfm)",
-        ))
+        player.sendMessage(
+            arrayOf(
+                "${CC.B_PRI}Staff Information:",
+                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Channel: ${
+                    if (profile.staffChannel == null) "${CC.RED}None" else "${profile.staffChannel!!.chatColor}${profile.staffChannel!!.name}"
+                }",
+                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Messages: ${
+                    if (profile.staffMessagesEnabled) "${CC.GREEN}Shown" else "${CC.RED}Hidden"
+                } ${CC.GRAY}(/tsm)",
+                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Reports: ${
+                    if (profile.staffReportNotificationsEnabled) "${CC.GREEN}Shown" else "${CC.RED}Hidden"
+                } ${CC.GRAY}(/trm)",
+                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}Filter: ${
+                    if (!lemonPlayer.hasMetadata("filter-disabled")) "${CC.GREEN}Shown" else "${CC.RED}Hidden"
+                } ${CC.GRAY}(/tfm)",
+            )
+        )
     }
 
     @Configure
@@ -90,6 +94,22 @@ object ModerationService
                 event.isCancelled = true
             }
         }
+
+        Events
+            .subscribe(PlayerJoinWithExpectationEvent::class.java)
+            .handler {
+                it.response.parameters["teleporting-player"]
+                    ?.apply {
+                        val player = Bukkit
+                            .getPlayer(
+                                UUID.fromString(this)
+                            )
+                            ?: return@apply
+
+                        Bukkit.getPlayer(it.uniqueId)
+                            ?.teleport(player)
+                    }
+            }
 
         Events.subscribe(EntityTargetEvent::class.java)
             .handler { event ->
@@ -146,11 +166,13 @@ object ModerationService
 
         fun handleApplicableClient(
             player: Player, lambda: (PlayerClientAdapter) -> Unit
-        ) {
+        )
+        {
             val adapter = Lemon.instance.clientAdapters
                 .firstOrNull { it.shouldHandle(player) }
 
-            if (adapter != null) {
+            if (adapter != null)
+            {
                 lambda.invoke(adapter)
             }
         }
@@ -175,7 +197,7 @@ object ModerationService
                     {
                         scheduler.schedule({
                             displayStaffInfo(it.player, profile, lemonPlayer)
-                        },25L, TimeUnit.MILLISECONDS)
+                        }, 25L, TimeUnit.MILLISECONDS)
                     }
 
                     if (

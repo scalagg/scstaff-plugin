@@ -7,6 +7,7 @@ import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
+import gg.scala.lemon.redirection.PlayerRedirectSystem
 import gg.scala.lemon.redirection.impl.VelocityRedirectSystem
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.stream.StaffMessageStream
@@ -44,7 +45,9 @@ object StaffJumpCommand : ScalaCommand()
                         includeOrigin = false
                     )
 
-                    VelocityRedirectSystem.redirect(player, it.id)
+                    VelocityRedirectSystem.redirect(player, it.id, mapOf(
+                        "teleporting-player" to lemonPlayer.uniqueId.toString()
+                    ))
                 }
                 .join()
         }

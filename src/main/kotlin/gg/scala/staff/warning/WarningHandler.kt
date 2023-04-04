@@ -3,12 +3,12 @@ package gg.scala.staff.warning
 import gg.scala.lemon.Lemon
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.ScalaStaffPlugin
-import gg.scala.staff.moderation.ModerationService
 import gg.scala.staff.stream.StaffMessageStream
+import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -24,7 +24,7 @@ object WarningHandler
         val issuer: UUID
     )
 
-    fun allWarnings(target: UUID) = ModerationService.connection
+    fun allWarnings(target: UUID) = ScalaCommonsSpigot.instance.kvConnection
         .sync().hgetall("staff:warnings:$target")
         .mapValues {
             Serializers.gson.fromJson(it.value, WrappedWarn::class.java)
@@ -36,11 +36,12 @@ object WarningHandler
                 UUID.randomUUID(), System.currentTimeMillis(), reason, issuer.uniqueId
             )
 
-            ModerationService.connection.async().hset(
-                "staff:warnings:$target",
-                wrapped.uniqueId.toString(),
-                Serializers.gson.toJson(wrapped)
-            )
+            ScalaCommonsSpigot.instance.kvConnection
+                .async().hset(
+                    "staff:warnings:$target",
+                    wrapped.uniqueId.toString(),
+                    Serializers.gson.toJson(wrapped)
+                )
 
             val issuerName = QuickAccess.nameOrConsole(issuer)
             val targetName = QuickAccess.fetchColoredName(target)
