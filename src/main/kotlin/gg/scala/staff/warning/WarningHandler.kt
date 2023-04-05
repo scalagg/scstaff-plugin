@@ -37,7 +37,7 @@ object WarningHandler
             )
 
             ScalaCommonsSpigot.instance.kvConnection
-                .async().hset(
+                .sync().hset(
                     "staff:warnings:$target",
                     wrapped.uniqueId.toString(),
                     Serializers.gson.toJson(wrapped)
