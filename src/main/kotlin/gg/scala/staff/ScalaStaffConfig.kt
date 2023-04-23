@@ -13,6 +13,7 @@ import xyz.mkotb.configapi.Coloured
 class ScalaStaffConfig
 {
     val reportsUiBased = false
+    val requestsEnabled = false
     val frozenAutoBan = false
 
     @Coloured
