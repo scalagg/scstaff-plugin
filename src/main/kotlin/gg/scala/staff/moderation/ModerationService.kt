@@ -36,6 +36,7 @@ import org.bukkit.event.entity.EntityTargetEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerPickupItemEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.metadata.FixedMetadataValue
 import java.util.*
@@ -95,6 +96,16 @@ object ModerationService
             }
         }
 
+        val interactionNoNotify: (Player, Cancellable) -> Unit = { player, event ->
+            if (player.hasMetadata("mod-mode"))
+            {
+                event.isCancelled = true
+            } else if (player.hasMetadata("vanished"))
+            {
+                event.isCancelled = true
+            }
+        }
+
         Events
             .subscribe(PlayerJoinWithExpectationEvent::class.java)
             .handler {
@@ -136,12 +147,16 @@ object ModerationService
             .bindWith(plugin)
 
         Events
-            .subscribe(PlayerDropItemEvent::class.java)
-            .filter {
-                it.player.hasMetadata("mod-mode")
-            }
+            .subscribe(PlayerPickupItemEvent::class.java)
             .handler { event ->
-                event.isCancelled = true
+                interactionNoNotify.invoke(event.player, event)
+            }
+            .bindWith(plugin)
+
+        Events
+            .subscribe(PlayerDropItemEvent::class.java)
+            .handler { event ->
+                interactionNoNotify.invoke(event.player, event)
             }
             .bindWith(plugin)
 
