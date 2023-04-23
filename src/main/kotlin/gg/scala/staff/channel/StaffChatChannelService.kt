@@ -42,7 +42,7 @@ object StaffChatChannelService
 
                 it.hasPermission("scstaff.channel.$channelName") && lemonPlayer.staffMessagesEnabled
             }
-            .override(1) {
+            .override(15) {
                 StaffProfileService.find(it)?.staffChannel == channelType
             }
 
