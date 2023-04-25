@@ -243,7 +243,11 @@ object ModerationService
             }
             .bindWith(plugin)
 
-        Events.subscribe(PlayerQuitEvent::class.java)
+        Events
+            .subscribe(
+                PlayerQuitEvent::class.java,
+                EventPriority.MONITOR
+            )
             .handler {
                 leaveModMode(it.player, silent = true)
                 leaveVanish(it.player, update = false)
