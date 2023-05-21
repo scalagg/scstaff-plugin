@@ -5,6 +5,7 @@ import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import gg.scala.lemon.listener.PlayerListener
 import gg.scala.lemon.util.QuickAccess
+import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.lemon.util.other.Expirable
 import gg.scala.staff.config
 import gg.scala.staff.moderation.frozen.event.PostFreezeEvent
@@ -53,7 +54,7 @@ object FrozenPlayerHandler : Runnable
                     {
                         Bukkit.dispatchCommand(
                             Bukkit.getConsoleSender(),
-                            "ban ${it.player.name} perm Disconnected while frozen -s"
+                            "ban ${it.player.uniqueId.username()} perm Disconnected while frozen -s"
                         )
                         return@handler
                     }

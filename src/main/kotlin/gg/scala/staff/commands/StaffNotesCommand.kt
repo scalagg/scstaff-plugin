@@ -51,7 +51,7 @@ object StaffNotesCommand : ScalaCommand()
     }
 
     @AssignPermission
-    @Subcommand("add|set")
+    @Subcommand("add")
     @CommandCompletion("@players")
     @Description("Attach a note to a player.")
     fun onAdd(player: Player, uniqueId: UUID, note: String)
@@ -60,7 +60,7 @@ object StaffNotesCommand : ScalaCommand()
     }
 
     @AssignPermission
-    @Syntax("<id>")
+    @Subcommand("remove")
     @CommandCompletion("@players")
     @Description("Remove a note from a player.")
     fun onRemove(player: Player, @Single id: String)

@@ -17,21 +17,16 @@ object FrozenPlayerUpdates : Runnable
 {
     override fun run()
     {
-        val finalMap = mutableMapOf<UUID, FrozenPlayerHandler.FrozenExpirable>().also {
-            expirables.forEach { entry ->
-                it[entry.key] = entry.value
-            }
-        }
+        expirables.toMap()
+            .forEach { (uuid, expirable) ->
+                if (expirable.hasExpired)
+                {
+                    StaffMessageStream.send(
+                        "${CC.AQUA}${QuickAccess.coloredName(uuid)}${CC.D_AQUA} has been frozen for 5 minutes.", true
+                    )
 
-        finalMap.forEach { (uuid, expirable) ->
-            if (expirable.hasExpired)
-            {
-                StaffMessageStream.send(
-                    "${CC.AQUA}${QuickAccess.coloredName(uuid)}${CC.D_AQUA} has been frozen for 5 minutes.", true
-                )
-
-                expirables.remove(uuid)
+                    expirables.remove(uuid)
+                }
             }
-        }
     }
 }

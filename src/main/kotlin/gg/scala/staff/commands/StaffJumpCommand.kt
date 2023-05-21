@@ -10,6 +10,7 @@ import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.redirection.PlayerRedirectSystem
 import gg.scala.lemon.redirection.impl.VelocityRedirectSystem
 import gg.scala.lemon.util.QuickAccess
+import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
@@ -41,7 +42,7 @@ object StaffJumpCommand : ScalaCommand()
                         .fetchColoredName(lemonPlayer.uniqueId)
 
                     StaffMessageStream.send(
-                        "${QuickAccess.coloredName(player, ignoreMinequest = true)} ${CC.D_AQUA}jumped to ${CC.AQUA}${coloredName}${CC.D_AQUA}.",
+                        "${QuickAccess.originalRank(player).color}${player.uniqueId.username()} ${CC.D_AQUA}jumped to ${CC.AQUA}${coloredName}${CC.D_AQUA}.",
                         includeOrigin = false
                     )
 
