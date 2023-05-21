@@ -25,7 +25,6 @@ import org.bukkit.command.CommandSender
 @AutoRegister
 object ChatSilenceCommand : ScalaCommand()
 {
-    @Syntax("[-h]")
     @CommandAlias("unmutechat|unsilencechat")
     @CommandPermission("scstaff.command.mutechat")
     fun onUnMuteChat(
@@ -40,7 +39,7 @@ object ChatSilenceCommand : ScalaCommand()
         ChatControlService.toggleChatSilence()
 
         val coloredName = QuickAccess.nameOrConsole(sender)
-        val hidden = hiddenString != null && hiddenString == "-h"
+        val hidden = hiddenString != null && hiddenString == "-s"
 
         Bukkit.broadcastMessage(
             "${CC.GREEN}The chat has been enabled by ${if (hidden) "staff" else coloredName}${CC.GREEN}."
@@ -51,7 +50,6 @@ object ChatSilenceCommand : ScalaCommand()
         )
     }
 
-    @Syntax("[-h]")
     @CommandAlias("mutechat|silencechat")
     @CommandPermission("scstaff.command.mutechat")
     fun onMuteChat(
@@ -66,7 +64,7 @@ object ChatSilenceCommand : ScalaCommand()
         ChatControlService.toggleChatSilence()
 
         val coloredName = QuickAccess.nameOrConsole(sender)
-        val hidden = hiddenString != null && hiddenString == "-h"
+        val hidden = hiddenString != null && hiddenString == "-s"
 
         Bukkit.broadcastMessage(
             "${CC.RED}The chat has been disabled by ${if (hidden) "staff" else coloredName}${CC.RED}."

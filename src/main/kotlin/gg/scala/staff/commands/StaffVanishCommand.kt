@@ -43,14 +43,14 @@ object StaffVanishCommand : ScalaCommand()
         val lemonPlayer = PlayerHandler.findPlayer(playerToVanish).orElse(null)
 
         val youOrNot = if (target != null) "${CC.YELLOW}${playerToVanish.name}${CC.RED} does" else "You do"
-        val youHave = if (target != null) "${coloredName(playerToVanish)}${CC.SEC} has" else "${CC.SEC}You've"
+        val youHave = if (target != null) "${coloredName(playerToVanish)}${CC.SEC} is" else "${CC.SEC}You are"
 
         if (
             !playerToVanish.isOp && lemonPlayer.activeGrant!!.getRank().weight <
             (priority ?: lemonPlayer.activeGrant!!.getRank().weight)
         )
         {
-            throw ConditionFailedException("$youOrNot not have permission to vanish with that priority.")
+            throw ConditionFailedException("$youOrNot not have permission to vanish with that power.")
         }
 
         if (!playerToVanish.hasMetadata("vanished"))
@@ -62,7 +62,7 @@ object StaffVanishCommand : ScalaCommand()
             )
 
             sender.sendMessage(
-                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}$youHave been vanished with a power of ${CC.PRI}$power${CC.SEC}."
+                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}$youHave now in vanish with a power of ${CC.PRI}$power${CC.SEC}."
             )
 
             notify(sender, "vanished")
@@ -71,7 +71,7 @@ object StaffVanishCommand : ScalaCommand()
             ModerationService.leaveVanish(playerToVanish)
 
             sender.sendMessage(
-                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}$youHave been un-vanished."
+                "${ScalaStaffPlugin.PREFIX} ${CC.SEC}$youHave no longer in vanish."
             )
 
             notify(sender, "unvanished")

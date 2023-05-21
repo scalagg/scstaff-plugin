@@ -21,6 +21,7 @@ import me.lucko.helper.Events
 import net.evilblock.cubed.nametag.NametagHandler
 import net.evilblock.cubed.scoreboard.ScoreboardHandler
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.bukkit.Tasks
 import net.evilblock.cubed.util.bukkit.player.PlayerSnapshot
 import net.evilblock.cubed.visibility.VisibilityHandler
 import org.bukkit.Bukkit
@@ -52,6 +53,11 @@ object ModerationService
 {
     @Inject
     lateinit var plugin: ScalaStaffPlugin
+
+    var configureOnExpectedJump = { player: UUID, target: Player ->
+        Bukkit.getPlayer(player)
+            ?.teleport(target)
+    }
 
     private val snapshots =
         mutableMapOf<UUID, PlayerSnapshot>()
@@ -91,7 +97,7 @@ object ModerationService
                 event.isCancelled = true
             } else if (player.hasMetadata("vanished"))
             {
-                player.sendMessage("${CC.RED}You cannot $action while vanished.")
+                player.sendMessage("${CC.RED}You cannot $action while in vanish.")
                 event.isCancelled = true
             }
         }
@@ -117,8 +123,9 @@ object ModerationService
                             )
                             ?: return@apply
 
-                        Bukkit.getPlayer(it.uniqueId)
-                            ?.teleport(player)
+                        Tasks.delayed(10L) {
+                            configureOnExpectedJump(it.uniqueId, player)
+                        }
                     }
             }
 
