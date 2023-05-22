@@ -202,7 +202,7 @@ object ModerationService
         Events
             .subscribe(
                 PlayerJoinEvent::class.java,
-                EventPriority.LOWEST
+                EventPriority.MONITOR
             )
             .handler {
                 val lemonPlayer = PlayerHandler
