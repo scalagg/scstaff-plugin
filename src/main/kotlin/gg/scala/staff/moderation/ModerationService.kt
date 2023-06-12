@@ -213,6 +213,18 @@ object ModerationService
                     .find(it.player)
                     ?: return@handler
 
+                profile.staffChannel?.apply {
+                    if (
+                        !it.player
+                            .hasPermission(
+                                "scstaff.channel.${name.lowercase()}"
+                            )
+                    )
+                    {
+                        profile.staffChannel = null
+                    }
+                }
+
                 if (it.player.hasPermission(ScalaStaffPlugin.STAFF_NODE))
                 {
                     if ("hub" in ServerSync.getLocalGameServer().groups)
