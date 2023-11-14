@@ -9,8 +9,7 @@ import gg.scala.commons.persist.datasync.DataSyncKeys
  */
 object ChatControlSyncKeys : DataSyncKeys
 {
-    private val NAMESPACE = "chatcontrol-${ServerSync.getLocalGameServer().groups.first()}"
-
-    override fun store() = keyOf(NAMESPACE, "configuration")
-    override fun sync() = keyOf(NAMESPACE, "update")
+    override fun store() = keyOf("asd", "configuration")
+    override fun newStore() = "ccontrol:${ServerSync.getLocalGameServer().groups.first()}"
+    override fun sync() = keyOf(ServerSync.getLocalGameServer().groups.first(), "ccontrol")
 }
