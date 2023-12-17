@@ -4,6 +4,7 @@ import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.ItemBuilder
+import net.evilblock.cubed.util.bukkit.prompt.InputPrompt
 import org.bukkit.entity.Player
 
 /**
@@ -33,8 +34,19 @@ class ReportMenu(
                     "${CC.GREEN}Click to report!"
                 )
                 .toButton { _, _ ->
+                    var reason = "Other"
+
+                    if (reportType == ReportType.OTHER)
+                    {
+                        InputPrompt()
+                            .withText("${CC.GREEN}Please enter any additional information:")
+                            .acceptInput { _, result ->
+                                reason = result
+                            }.start(player)
+                    } else reason = reportType.fancyName
+
                     player.closeInventory()
-                    ReportProcessor.processReport(player, target.uniqueId, reportType.fancyName)
+                    ReportProcessor.processReport(player, target.uniqueId, reason)
                     player.sendMessage("${CC.GREEN}Your report has been submitted!")
                 }
         }
