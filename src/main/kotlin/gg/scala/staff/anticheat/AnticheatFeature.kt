@@ -17,6 +17,7 @@ import gg.scala.staff.profile.StaffProfileService
 import gg.scala.staff.stream.StaffMessageStream
 import me.lucko.helper.Events
 import me.lucko.helper.utils.Players
+import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.FancyMessage
 import net.md_5.bungee.api.chat.ClickEvent
@@ -60,11 +61,13 @@ object AnticheatFeature
                             "incoming",
                             this.aware,
                             "server" to ServerSync.getLocalGameServer().id,
-                            "alert" to AnticheatAlert(
-                                playerID = it.player.uniqueId,
-                                checkType = it.type.getName(),
-                                violations = it.violations,
-                                label = it.label
+                            "alert" to Serializers.gson.toJson(
+                                AnticheatAlert(
+                                    playerID = it.player.uniqueId,
+                                    checkType = it.type.getName(),
+                                    violations = it.violations,
+                                    label = it.label
+                                )
                             )
                         )
                         .publish(AwareThreadContext.ASYNC)
@@ -79,7 +82,11 @@ object AnticheatFeature
                 return@listen
             }
 
-            val alert = retrieve<AnticheatAlert>("alert")
+            val alert = Serializers.gson.fromJson(
+                retrieve<String>("alert"),
+                AnticheatAlert::class.java
+            )
+
             val fancyMessage = FancyMessage()
                 .withMessage(
                     "${CC.RED}[AC] ${CC.D_RED}[$serverID] ${CC.WHITE}${alert.playerID.username()}${CC.RED} failed ${CC.B_WHITE}${alert.checkType}${CC.RED}.${
