@@ -24,6 +24,7 @@ data class StaffProfile(
     var vanishVisibilityEnabled = true
 
     var staffAutoVanishEnabled = false
+    var staffGlobalAntiCheatAlerts: Boolean? = false
 
     override fun save() =
         DataStoreObjectControllerCache

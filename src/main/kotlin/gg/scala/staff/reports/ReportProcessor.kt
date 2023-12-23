@@ -1,8 +1,13 @@
 package gg.scala.staff.reports
 
+import com.mongodb.client.model.IndexOptions
+import com.mongodb.client.model.Sorts
+import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import gg.scala.lemon.util.QuickAccess.username
+import gg.scala.staff.reports.model.Report
 import gg.scala.staff.stream.StaffMessageStream
+import gg.scala.store.controller.DataStoreObjectControllerCache
 import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
@@ -18,6 +23,22 @@ import java.util.concurrent.TimeUnit
 object ReportProcessor
 {
     val stream = ScalaCommonsSpigot.instance.kvConnection
+
+    @Configure
+    fun configure()
+    {
+        DataStoreObjectControllerCache
+            .findNotNull<Report>()
+            .mongo()
+            .connection
+            .getAppliedResource()
+            .getCollection("Report")
+            .createIndex(
+                Sorts.ascending("timestamp"),
+                IndexOptions()
+                    .expireAfter(130, TimeUnit.SECONDS)
+            )
+    }
 
     fun getExpiration(player: Player): CompletableFuture<Long?>
     {
