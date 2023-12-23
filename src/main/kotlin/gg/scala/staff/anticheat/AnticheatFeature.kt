@@ -4,6 +4,7 @@ import dev.sim0n.anticheat.event.AntiCheatAlertEvent
 import gg.scala.aware.AwareBuilder
 import gg.scala.aware.codec.codecs.interpretation.AwareMessageCodec
 import gg.scala.aware.message.AwareMessage
+import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.commons.annotations.plugin.SoftDependency
 import gg.scala.flavor.inject.Inject
@@ -54,17 +55,19 @@ object AnticheatFeature
             Events
                 .subscribe(AntiCheatAlertEvent::class.java)
                 .handler {
-                    AwareMessage.of(
-                        "incoming",
-                        this.aware,
-                        "server" to ServerSync.getLocalGameServer().id,
-                        "alert" to AnticheatAlert(
-                            playerID = it.player.uniqueId,
-                            checkType = it.type.getName(),
-                            violations = it.violations,
-                            label = it.label
+                    AwareMessage
+                        .of(
+                            "incoming",
+                            this.aware,
+                            "server" to ServerSync.getLocalGameServer().id,
+                            "alert" to AnticheatAlert(
+                                playerID = it.player.uniqueId,
+                                checkType = it.type.getName(),
+                                violations = it.violations,
+                                label = it.label
+                            )
                         )
-                    )
+                        .publish(AwareThreadContext.ASYNC)
                 }
                 .bindWith(plugin)
         }
