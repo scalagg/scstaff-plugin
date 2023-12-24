@@ -89,10 +89,10 @@ object AnticheatFeature
 
             val fancyMessage = FancyMessage()
                 .withMessage(
-                    "${CC.RED}[AC] ${CC.D_RED}[$serverID] ${CC.WHITE}${alert.playerID.username()}${CC.RED} failed ${CC.B_WHITE}${alert.checkType}${CC.RED}.${
-                        " ${CC.GRAY}(VL: ${alert.violations})${
-                            if (alert.label.isNotBlank()) " ${CC.GRAY}(${alert.label})" else ""
-                        }"
+                    "${CC.RED}[AC] ${CC.D_RED}[$serverID] ${CC.WHITE}${alert.playerID.username()}${CC.RED} failed ${CC.B_WHITE}${alert.checkType}${
+                        if (alert.label.isNotBlank()) " ${alert.label}" else ""
+                    }${CC.RED}.${
+                        " ${CC.GRAY}(VL: ${alert.violations})"
                     }"
                 )
                 .andHoverOf(
