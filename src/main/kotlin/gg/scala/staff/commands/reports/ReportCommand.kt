@@ -2,6 +2,7 @@ package gg.scala.staff.commands.reports
 
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
+import gg.scala.commons.acf.annotation.CommandCompletion
 import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.acf.annotation.Optional
 import gg.scala.commons.annotations.commands.AutoRegister
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit
 object ReportCommand : ScalaCommand()
 {
     @CommandAlias("report")
+    @CommandCompletion("@players")
     @CommandPermission("scstaff.command.report")
     fun onReport(
         player: ScalaPlayer, target: LemonPlayer,
@@ -53,25 +55,8 @@ object ReportCommand : ScalaCommand()
                     return@thenCompose CompletableFuture.completedFuture(null)
                 }
 
-                if (config().reportsUiBased)
-                {
-                    ReportMenu(target.bukkitPlayer!!).openMenu(player.bukkit())
-                    return@thenCompose CompletableFuture.completedFuture(null)
-                }
-
-                if (message.isNullOrEmpty())
-                {
-                    // wonky fr
-                    throw ConditionFailedException(
-                        "${CC.SEC}Usage: ${CC.PRI}/report ${CC.WHITE}<target> <message>"
-                    )
-                }
-
-                player.sendMessage("${CC.GREEN}We've received your report. This report will be looked into as soon as possible.")
-
-                ReportProcessor.processReport(
-                    player.bukkit(), target.uniqueId, message
-                )
+                ReportMenu(target.bukkitPlayer!!).openMenu(player.bukkit())
+                return@thenCompose CompletableFuture.completedFuture(null)
             }
     }
 }

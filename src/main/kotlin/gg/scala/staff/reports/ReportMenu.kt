@@ -65,7 +65,7 @@ class ReportMenu(
                             })
                             .withEscapeSequence("/no")
                             .withLocalEcho(false)
-                            .withTimeout(5)
+                            .withTimeout(10)
 
                         val conversation = factory.buildConversation(player)
 

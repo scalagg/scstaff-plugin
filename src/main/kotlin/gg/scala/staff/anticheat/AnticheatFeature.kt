@@ -21,6 +21,7 @@ import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.FancyMessage
 import net.md_5.bungee.api.chat.ClickEvent
+import org.bukkit.event.EventPriority
 import java.util.UUID
 
 /**
@@ -54,7 +55,7 @@ object AnticheatFeature
         if (plugin.server.pluginManager.isPluginEnabled("anticheat"))
         {
             Events
-                .subscribe(AntiCheatAlertEvent::class.java)
+                .subscribe(AntiCheatAlertEvent::class.java, EventPriority.MONITOR)
                 .handler {
                     AwareMessage
                         .of(
