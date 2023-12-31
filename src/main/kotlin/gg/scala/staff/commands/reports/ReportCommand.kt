@@ -1,5 +1,6 @@
 package gg.scala.staff.commands.reports
 
+import gg.scala.commons.ExtendedScalaPlugin
 import gg.scala.commons.acf.ConditionFailedException
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandCompletion
@@ -8,6 +9,7 @@ import gg.scala.commons.acf.annotation.Optional
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.flavor.inject.Inject
 import gg.scala.lemon.player.LemonPlayer
 import gg.scala.staff.config
 import gg.scala.staff.reports.ReportMenu
@@ -24,6 +26,9 @@ import java.util.concurrent.TimeUnit
 @AutoRegister
 object ReportCommand : ScalaCommand()
 {
+    @Inject
+    lateinit var plugin: ExtendedScalaPlugin
+
     @CommandAlias("report")
     @CommandCompletion("@players")
     @CommandPermission("scstaff.command.report")
@@ -55,7 +60,10 @@ object ReportCommand : ScalaCommand()
                     return@thenCompose CompletableFuture.completedFuture(null)
                 }
 
-                ReportMenu(target.bukkitPlayer!!).openMenu(player.bukkit())
+                plugin.flavor()
+                    .injected<ReportMenu>(target.bukkitPlayer!!)
+                    .openMenu(player.bukkit())
+
                 return@thenCompose CompletableFuture.completedFuture(null)
             }
     }
