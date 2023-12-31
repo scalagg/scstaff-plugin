@@ -11,11 +11,14 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.flavor.inject.Inject
 import gg.scala.lemon.player.LemonPlayer
+import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
+import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.config
 import gg.scala.staff.reports.ReportMenu
 import gg.scala.staff.reports.ReportProcessor
 import net.evilblock.cubed.util.CC
 import org.apache.commons.lang3.time.DurationFormatUtils
+import org.bukkit.entity.Player
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
@@ -29,42 +32,47 @@ object ReportCommand : ScalaCommand()
     @Inject
     lateinit var plugin: ExtendedScalaPlugin
 
+    // if (target.bukkitPlayer!!.uniqueId == player.uniqueId)
+    //        {
+    //            throw ConditionFailedException("You're not allowed to report yourself.")
+    //        }
+    //
+    //        if (target.hasPermission("scstaff.command.report.bypass"))
+    //        {
+    //            throw ConditionFailedException("You're unable to report ${CC.SEC}${target.getColoredName()}${CC.RED}.")
+    //        }
+    //
+
+
     @CommandAlias("report")
     @CommandCompletion("@players")
     @CommandPermission("scstaff.command.report")
-    fun onReport(
-        player: ScalaPlayer, target: LemonPlayer,
-        @Optional message: String?
-    ): CompletableFuture<Void>
-    {
-        if (target.bukkitPlayer!!.uniqueId == player.uniqueId)
-        {
-            throw ConditionFailedException("You're not allowed to report yourself.")
-        }
-
-        if (target.hasPermission("scstaff.command.report.bypass"))
-        {
-            throw ConditionFailedException("You're unable to report ${CC.SEC}${target.getColoredName()}${CC.RED}.")
-        }
-
-        return ReportProcessor
-            .getExpiration(player.bukkit())
-            .thenCompose {
-                if (it != null)
-                {
-                    player.sendMessage(
-                        "${CC.RED}You must wait ${CC.BOLD}${
-                            DurationFormatUtils.formatDurationWords(it - System.currentTimeMillis(), true, true)
-                        }${CC.RED} before reporting again."
-                    )
-                    return@thenCompose CompletableFuture.completedFuture(null)
-                }
-
-                plugin.flavor()
-                    .injected<ReportMenu>(target.bukkitPlayer!!)
-                    .openMenu(player.bukkit())
-
-                return@thenCompose CompletableFuture.completedFuture(null)
+    fun onReport(player: ScalaPlayer, target: AsyncLemonPlayer) = ReportProcessor
+        .getExpiration(player.bukkit())
+        .thenCompose {
+            if (it != null)
+            {
+                throw ConditionFailedException("${CC.RED}You must wait ${CC.BOLD}${
+                    DurationFormatUtils.formatDurationWords(it - System.currentTimeMillis(), true, true)
+                }${CC.RED} before reporting again.")
             }
-    }
+
+            return@thenCompose target
+                .validatePlayers(player.bukkit(), true) { lemonPlayer ->
+                    val online = QuickAccess
+                        .online(lemonPlayer.uniqueId)
+                        .join()
+
+                    if (!online)
+                    {
+                        throw ConditionFailedException(
+                            "The player ${CC.YELLOW}${lemonPlayer.name}${CC.RED} is not logged onto the network."
+                        )
+                    }
+
+                    plugin.flavor()
+                        .injected<ReportMenu>(lemonPlayer.uniqueId)
+                        .openMenu(player.bukkit())
+                }
+        }
 }

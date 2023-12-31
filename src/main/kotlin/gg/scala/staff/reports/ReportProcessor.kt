@@ -4,6 +4,7 @@ import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Sorts
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.reports.model.Report
 import gg.scala.staff.stream.StaffMessageStream
@@ -54,7 +55,7 @@ object ReportProcessor
     }
 
     fun processReport(
-        player: Player, target: UUID, reason: String
+        player: Player, target: UUID, type: ReportType, reason: String? = null
     ): CompletableFuture<Void>
     {
         val millis = TimeUnit.SECONDS.toMillis(90L)
@@ -63,20 +64,27 @@ object ReportProcessor
         return CompletableFuture
             .runAsync {
                 stream.sync()
-                    .set(
+                    .psetex(
                         "reports:expiration:${player.uniqueId}",
+                        millis,
                         expiration.toString()
                     )
             }
             .thenRun {
-                stream.sync().pexpire(
-                    "reports:expiration:${player.uniqueId}", millis
+                stream.sync().incr(
+                    "reports:expiration:${player.uniqueId}"
                 )
             }
             .toCompletableFuture()
             .thenRun {
                 StaffMessageStream.send(
-                    "${CC.YELLOW}${player.displayName}${CC.RED} has reported ${target.username()} for ${CC.GOLD}$reason${CC.RED}.",
+                    "${CC.YELLOW}${
+                        QuickAccess.computeColoredName(player.uniqueId, player.name).join()
+                    }${CC.RED} has reported ${CC.YELLOW}${
+                        QuickAccess.computeColoredName(target, target.username()).join()
+                    }${CC.RED} for ${CC.GOLD}${type.fancyName}${CC.RED}${
+                        if (reason != null) " ${CC.GRAY}($reason)${CC.RED}" else ""
+                    }.",
                     mustNotHaveMetadata = "reports-disabled"
                 )
             }

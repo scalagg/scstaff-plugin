@@ -1,22 +1,23 @@
 package gg.scala.staff.reports
 
 import gg.scala.flavor.inject.Inject
+import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.ScalaStaffPlugin
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.Menu
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.bukkit.Constants
 import net.evilblock.cubed.util.bukkit.ItemBuilder
-import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.conversations.*
 import org.bukkit.entity.Player
-import java.util.concurrent.TimeUnit
+import java.util.UUID
 
 /**
  * @author GrowlyX
  * @since 9/10/2022
  */
 class ReportMenu(
-    private val target: Player
+    private val target: UUID
 ) : Menu()
 {
     @Inject
@@ -24,7 +25,7 @@ class ReportMenu(
 
     override fun getTitle(player: Player): String
     {
-        return "Reporting ${target.name}"
+        return "Reporting: ${target.username()}"
     }
 
     override fun getButtons(player: Player): Map<Int, Button>
@@ -34,9 +35,13 @@ class ReportMenu(
         for (reportType in ReportType.entries)
         {
             buttons[buttons.size] = ItemBuilder(reportType.material)
-                .name("${CC.B_GREEN}${reportType.fancyName}")
+                .name("${CC.GREEN}${reportType.fancyName}")
+                .apply {
+                    reportType.examples.forEach {
+                        addToLore("${CC.WHITE}${Constants.THIN_VERTICAL_LINE} ${CC.GRAY}$it")
+                    }
+                }
                 .addToLore(
-                    "${CC.WHITE}${reportType.examples.joinToString(", ")}",
                     "",
                     "${CC.GREEN}Click to report!"
                 )
@@ -55,30 +60,60 @@ class ReportMenu(
 
                                 override fun acceptInput(context: ConversationContext, input: String): Prompt
                                 {
-                                    ReportProcessor.processReport(player, target.uniqueId, input)
-                                    player.closeInventory()
-                                    player.sendMessage("${CC.GREEN}Your report has been submitted!")
-
-                                    return Prompt.END_OF_CONVERSATION
+                                    return END_OF_CONVERSATION
                                 }
-
                             })
-                            .withEscapeSequence("/no")
+                            .withEscapeSequence("quit")
                             .withLocalEcho(false)
                             .withTimeout(10)
 
+                        player.closeInventory()
+
                         val conversation = factory.buildConversation(player)
+                        conversation.cancellers.add(object : ConversationCanceller
+                        {
+                            override fun clone() = this
+
+                            override fun setConversation(conversation: Conversation?)
+                            {
+                            }
+
+                            override fun cancelBasedOnInput(context: ConversationContext, input: String): Boolean
+                            {
+                                ReportProcessor.processReport(player, target, reportType, input)
+                                    .thenRun {
+                                        player.sendMessage("${CC.GREEN}Your report has been submitted! A staff member will respond to this report as soon as possible.")
+
+                                        Button.playNeutral(player)
+                                    }
+
+
+                                context.allSessionData["completed"] = true
+                                return true
+                            }
+                        })
 
                         conversation.addConversationAbandonedListener {
+                            if (it.context.getSessionData("completed") == true)
+                            {
+                                return@addConversationAbandonedListener
+                            }
+
                             player.sendMessage("${CC.RED}Your report was cancelled as you didn't prove a reason within a reasonable amount of time.")
                         }
 
                         player.beginConversation(conversation)
                     } else
                     {
-                        ReportProcessor.processReport(player, target.uniqueId, reportType.fancyName)
                         player.closeInventory()
-                        player.sendMessage("${CC.GREEN}Your report has been submitted!")
+
+                        ReportProcessor
+                            .processReport(player, target, reportType)
+                            .thenRun {
+                                player.sendMessage("${CC.GREEN}Your report has been submitted! A staff member will respond to this report as soon as possible.")
+
+                                Button.playNeutral(player)
+                            }
                     }
                 }
         }
