@@ -10,6 +10,7 @@ import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.menu.modmode.InspectionMenu
 import gg.scala.lemon.player.LemonPlayer
 import gg.scala.lemon.redirection.expectation.PlayerJoinWithExpectationEvent
+import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.moderation.frozen.event.ModModeEnterEvent
 import gg.scala.staff.moderation.hotbar.ModModeHotbar
@@ -299,8 +300,7 @@ object ModerationService
         player.setMetadata("vanished", FixedMetadataValue(plugin, true))
         player.setMetadata("vanish-power", FixedMetadataValue(plugin, power))
 
-        VisibilityHandler.updateToAll(player)
-        NametagHandler.reloadPlayer(player)
+        QuickAccess.reloadPlayer(player.uniqueId, recalculateGrants = false)
     }
 
     fun leaveVanish(player: Player, update: Boolean = true)
