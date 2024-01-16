@@ -44,6 +44,18 @@ object ReportProcessor
         additionalServerDataProviders += contextProvider
     }
 
+    private var additionalActionProviders = mutableListOf<(Player, PlayerReport) -> List<ResponseAction>>()
+    fun configureActionProvider(
+        actionProvider: (Player, PlayerReport) -> List<ResponseAction>
+    )
+    {
+        additionalActionProviders += actionProvider
+    }
+
+    fun reduceAllActionProviders(player: Player, report: PlayerReport) = additionalActionProviders
+        .map { it.invoke(player, report) }
+        .flatten()
+
     private var reportTypePreChecks = mutableListOf<(Player, ReportType) -> Boolean>()
     fun configureReportTypePreChecks(
         isAllowed: (Player, ReportType) -> Boolean
@@ -62,8 +74,28 @@ object ReportProcessor
             .getAppliedResource()
             .getCollection("PlayerReport")
 
+        configureActionProvider { _, playerReport ->
+            listOf(
+                ResponseAction(
+                    description = "Jump to player's server",
+                    command = "jump ${playerReport.to.username()}"
+                ),
+                ResponseAction(
+                    description = "View more information on related accounts",
+                    command = "alts ${playerReport.to.username()}"
+                ),
+                ResponseAction(
+                    description = "View punishment history of player",
+                    command = "history ${playerReport.to.username()}"
+                )
+            )
+        }
+
         Serializers.create {
-            registerTypeAdapter(WBsonDate::class.java, BsonDateTimeGsonSerializer)
+            registerTypeAdapter(
+                WBsonDate::class.java,
+                BsonDateTimeGsonSerializer
+            )
         }
 
         collection.createIndex(
