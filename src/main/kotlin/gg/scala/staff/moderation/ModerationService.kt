@@ -308,7 +308,10 @@ object ModerationService
         player.removeMetadata("vanished", plugin)
         player.removeMetadata("vanish-power", plugin)
 
-        QuickAccess.reloadPlayer(player.uniqueId, recalculateGrants = false)
+        if (update)
+        {
+            QuickAccess.reloadPlayer(player.uniqueId, recalculateGrants = false)
+        }
     }
 
     fun enterModMode(player: Player)

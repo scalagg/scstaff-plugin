@@ -18,14 +18,14 @@ object ChatControlService
 {
     object ChatCooldown : PlayerCooldown("chat")
     {
-        override fun durationFor(player: Player) =
-            if (player.hasPermission("scstaff.chat.cooldown.donator"))
+        override fun durationFor(t: Player) =
+            if (t.hasPermission("scstaff.chat.cooldown.donator"))
                 1000L else 3000L
     }
 
     object SlowChatCooldown : PlayerCooldown("slow-chat")
     {
-        override fun durationFor(player: Player) =
+        override fun durationFor(t: Player) =
             ChatControlSyncService.cached().chatSlowDown * 1_000L
     }
 
