@@ -46,7 +46,7 @@ class ReportMenu(
                     "${CC.GREEN}Click to report!"
                 )
                 .toButton { _, _ ->
-                    if (reportType == ReportType.OTHER)
+                    if (reportType == ReportType.Other)
                     {
                         val factory = ConversationFactory(plugin)
                             .withModality(true)

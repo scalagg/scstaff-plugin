@@ -12,42 +12,42 @@ enum class ReportType(
     val material: XMaterial,
 ) {
 
-    COMBAT_HACKS(
+    CombatHacks(
         "Combat Hacks",
         listOf("KillAura", "Reach", "Aim Assist"),
         XMaterial.DIAMOND_SWORD
     ),
-    MOVEMENT_HACKS(
+    MovementHacks(
         "Movement Hacks",
         listOf("Speed", "Bunny Hop", "Fly"),
         XMaterial.RABBIT_FOOT
     ),
-    VELOCITY_HACKS(
+    VelocityHacks(
         "Velocity Hacks",
         listOf("Velocity", "Reduced KB", "Anti KB"),
         XMaterial.SLIME_BALL
     ),
-    CHAT_ABUSE(
+    ChatAbuse(
         "Chat Abuse",
         listOf("Toxicity", "Spam", "Illegal Characters"),
         XMaterial.PAPER
     ),
-    GAME_SABOTAGE(
+    GameSabotage(
         "Game Sabotage",
         listOf("Camping", "Running", "Stalling"),
         XMaterial.GLOWSTONE_DUST
     ),
-    CROSS_TEAMING(
+    CrossTeaming(
         "Teaming",
         listOf("Trucing", "Player Collision", "Group Game Sabotage"),
         XMaterial.STICK
     ),
-    SUSPICIOUS_ACTIVITY(
+    SuspiciousActivity(
         "Suspicious Activity",
         listOf("DDoS Threats", "Dox Threats", "Self Harm"),
         XMaterial.RED_DYE
     ),
-    OTHER(
+    Other(
         "Other",
         listOf("Anything that's not listed..."),
         XMaterial.PAINTING
