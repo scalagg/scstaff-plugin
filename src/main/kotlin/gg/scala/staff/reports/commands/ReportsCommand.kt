@@ -31,7 +31,7 @@ object ReportsCommand : ScalaCommand()
             ReportProcessor
                 .getAllReportsOnUser(it.uniqueId)
                 .thenAccept { reports ->
-                    ViewReportsMenu(reports)
+                    ViewReportsMenu(reports, "for ${it.name}")
                         .openMenu(player.bukkit())
                 }
                 .join()
