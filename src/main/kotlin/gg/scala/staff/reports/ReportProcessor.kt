@@ -30,6 +30,14 @@ object ReportProcessor
     private val stream: StatefulRedisConnection<String, String> =
         ScalaCommonsSpigot.instance.kvConnection
 
+    private var additionalServerDataProviders = mutableListOf<(Player, UUID) -> Map<String, String>>()
+    fun provideAdditionalServerData(
+        contextProvider: (Player, UUID) -> Map<String, String>
+    )
+    {
+        additionalServerDataProviders += contextProvider
+    }
+
     private var reportTypePreChecks = mutableListOf<(Player, ReportType) -> Boolean>()
     fun configureReportTypePreChecks(
         isAllowed: (Player, ReportType) -> Boolean
