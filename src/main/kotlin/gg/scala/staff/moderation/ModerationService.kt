@@ -300,7 +300,7 @@ object ModerationService
         player.setMetadata("vanished", FixedMetadataValue(plugin, true))
         player.setMetadata("vanish-power", FixedMetadataValue(plugin, power))
 
-        QuickAccess.reloadPlayer(player.uniqueId, recalculateGrants = false)
+        player.playerListName = "${CC.GRAY}[V] ${player.name}"
     }
 
     fun leaveVanish(player: Player, update: Boolean = true)
@@ -308,11 +308,7 @@ object ModerationService
         player.removeMetadata("vanished", plugin)
         player.removeMetadata("vanish-power", plugin)
 
-        if (update)
-        {
-            VisibilityHandler.updateToAll(player)
-            NametagHandler.reloadPlayer(player)
-        }
+        QuickAccess.reloadPlayer(player.uniqueId, recalculateGrants = false)
     }
 
     fun enterModMode(player: Player)

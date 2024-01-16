@@ -4,6 +4,7 @@ import gg.scala.common.Savable
 import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.commons.annotations.Model
 import gg.scala.staff.reports.ReportType
+import gg.scala.staff.reports.model.wrapper.WBsonDate
 import gg.scala.store.controller.DataStoreObjectControllerCache
 import gg.scala.store.controller.annotations.Indexed
 import gg.scala.store.storage.storable.IDataStoreObject
@@ -26,11 +27,10 @@ data class PlayerReport(
     val relatedAccounts: Set<UUID>,
     override val identifier: UUID = UUID.randomUUID(),
     @Indexed
-    val sentFrom: String = ServerSync.getLocalGameServer().id,
+    val fromServer: String = ServerSync.getLocalGameServer().id,
     @Indexed
     var priority: Priority = Priority.Normal,
-    val timestamp: Long = System
-        .currentTimeMillis()
+    val timestamp: WBsonDate = WBsonDate(System.currentTimeMillis())
 ) : IDataStoreObject, Savable
 {
     override fun save() = DataStoreObjectControllerCache

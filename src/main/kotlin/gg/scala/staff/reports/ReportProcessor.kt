@@ -11,10 +11,14 @@ import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.reports.model.Priority
 import gg.scala.staff.reports.model.PlayerReport
+import gg.scala.staff.reports.model.wrapper.WBsonDate
+import gg.scala.staff.reports.model.wrapper.BsonDateTimeGsonSerializer
 import gg.scala.staff.stream.StaffMessageStream
 import gg.scala.store.controller.DataStoreObjectControllerCache
+import gg.scala.store.storage.type.DataStoreStorageType
 import io.lettuce.core.api.StatefulRedisConnection
 import net.evilblock.cubed.ScalaCommonsSpigot
+import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import org.bson.conversions.Bson
 import org.bukkit.entity.Player
@@ -58,6 +62,10 @@ object ReportProcessor
             .getAppliedResource()
             .getCollection("PlayerReport")
 
+        Serializers.create {
+            registerTypeAdapter(WBsonDate::class.java, BsonDateTimeGsonSerializer)
+        }
+
         collection.createIndex(
             Sorts.ascending("timestamp"),
             IndexOptions()
@@ -69,6 +77,11 @@ object ReportProcessor
         .findNotNull<PlayerReport>()
         .mongo()
         .loadAllWithFilter(filters)
+        .thenApply { it.values.toList() }
+
+    fun getAllReports() = DataStoreObjectControllerCache
+        .findNotNull<PlayerReport>()
+        .loadAll(DataStoreStorageType.MONGO)
         .thenApply { it.values.toList() }
 
     fun getAllReportsOnUserFrom(user: UUID, from: UUID) = aggregateReports(
@@ -141,6 +154,11 @@ object ReportProcessor
         val millis = TimeUnit.SECONDS.toMillis(90L)
         val expiration = System.currentTimeMillis() + millis
 
+        if (!reportTypePreChecks.all { it(player, type) })
+        {
+            return CompletableFuture.completedFuture(null)
+        }
+
         return CompletableFuture
             .runAsync {
                 stream.sync()
@@ -186,7 +204,11 @@ object ReportProcessor
 
                 playerReport.save()
             }
-            .thenRunAsync {
+            .thenComposeAsync {
+                getAllReportsOnUser(target)
+            }
+            .thenAcceptAsync {
+                // TODO: once in prod, separate lines properly for 1.7 players
                 StaffMessageStream.send(
                     "${CC.YELLOW}${
                         QuickAccess.computeColoredName(player.uniqueId, player.name).join()
@@ -194,9 +216,17 @@ object ReportProcessor
                         QuickAccess.computeColoredName(target, target.username()).join()
                     }${CC.RED} for ${CC.GOLD}${type.fancyName}${CC.RED}${
                         if (reason != null) " ${CC.GRAY}($reason)${CC.RED}" else ""
-                    }.",
+                    }.\n    ${
+                        "${CC.GRAY}(${CC.B}${it.size}${CC.GRAY} report${if (it.size == 1) "" else "s"} last 5m, ${
+                            "${CC.B}${it.count { report -> report.from == player.uniqueId }}${CC.GRAY} from same user"
+                        })"
+                    }",
                     mustNotHaveMetadata = "reports-disabled"
                 )
+            }
+            .exceptionally {
+                it.printStackTrace()
+                return@exceptionally null
             }
     }
 }
