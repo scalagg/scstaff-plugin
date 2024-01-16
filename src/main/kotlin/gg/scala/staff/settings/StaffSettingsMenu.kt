@@ -110,7 +110,7 @@ class StaffSettingsMenu : Menu("Staff Settings")
             .of(Material.PAPER)
             .name(
                 "${
-                    if (lemonProfile.hasMetadata("filter-disabled")) CC.B_GREEN else CC.B_RED
+                    if (!lemonProfile.hasMetadata("filter-disabled")) CC.B_GREEN else CC.B_RED
                 }Filtered Messages"
             )
             .addToLore(
@@ -118,7 +118,7 @@ class StaffSettingsMenu : Menu("Staff Settings")
                 "${CC.WHITE}of filtered messages.",
                 "",
                 "${CC.WHITE}Current: ${CC.YELLOW}${
-                    lemonProfile.hasMetadata("filter-disabled")
+                    !lemonProfile.hasMetadata("filter-disabled")
                 }",
                 "",
                 "${CC.GREEN}Click to toggle!"
