@@ -15,13 +15,14 @@ import net.evilblock.cubed.util.bukkit.ItemBuilder
 import net.evilblock.cubed.util.text.TextSplitter
 import net.evilblock.cubed.util.time.DateUtil
 import org.bukkit.entity.Player
+import java.util.concurrent.CompletableFuture
 
 /**
  * @author GrowlyX
  * @since 1/16/2024
  */
 data class ViewReportsMenu(
-    private val reports: List<PlayerReport>,
+    private val reports: () -> CompletableFuture<List<PlayerReport>>,
     private val source: String = ""
 ) : PaginatedMenu()
 {
@@ -30,16 +31,20 @@ data class ViewReportsMenu(
         async = true
     }
 
+    private var listOfReports: List<PlayerReport> = listOf()
     override fun asyncLoadResources(player: Player, callback: (Boolean) -> Unit)
     {
-        callback(true)
+        reports().thenAccept {
+            listOfReports = it
+            callback(true)
+        }
     }
 
     override fun getAllPagesButtons(player: Player): Map<Int, Button>
     {
         val buttons = mutableMapOf<Int, Button>()
 
-        for (report in reports)
+        for (report in listOfReports)
         {
             val userIsOnline = QuickAccess.online(report.to).join()
             val lastLogin = QuickAccess.getLastOnline(report.to).join()
@@ -141,17 +146,18 @@ data class ViewReportsMenu(
                         return@toButton
                     }
 
-                    Button.playSuccess(player)
-
-                    player.closeInventory()
-                    player.sendMessage("${CC.RED}The report has been resolved!")
-
                     DataStoreObjectControllerCache
                         .findNotNull<PlayerReport>()
                         .delete(
                             report.identifier,
                             DataStoreStorageType.MONGO
                         )
+                        .thenRun {
+                            player.sendMessage("${CC.RED}The report has been resolved!")
+                            Button.playSuccess(player)
+
+                            openMenu(player)
+                        }
                 }
         }
 

@@ -39,10 +39,10 @@ class StaffSettingsMenu : Menu("Staff Settings")
                 }Staff Messages"
             )
             .addToLore(
-                "${CC.WHITE}Enable or disable staff",
-                "${CC.WHITE}messages for your account.",
+                "${CC.GRAY}Enable or disable staff",
+                "${CC.GRAY}messages for your account.",
                 "",
-                "${CC.WHITE}Current: ${CC.YELLOW}${
+                "${CC.WHITE}Current: ${CC.GREEN}${
                     profile.staffMessagesEnabled
                 }",
                 "",
@@ -67,10 +67,10 @@ class StaffSettingsMenu : Menu("Staff Settings")
                 }Staff Visibility"
             )
             .addToLore(
-                "${CC.WHITE}Enable or disable staff",
-                "${CC.WHITE}visibility on your account.",
+                "${CC.GRAY}Enable or disable staff",
+                "${CC.GRAY}visibility on your account.",
                 "",
-                "${CC.WHITE}Current: ${CC.YELLOW}${
+                "${CC.WHITE}Current: ${CC.GREEN}${
                     profile.staffVisibilityEnabled
                 }",
                 "",
@@ -89,10 +89,10 @@ class StaffSettingsMenu : Menu("Staff Settings")
                 }Auto Vanish"
             )
             .addToLore(
-                "${CC.WHITE}Enable or disable auto",
-                "${CC.WHITE}vanish on your account.",
+                "${CC.GRAY}Enable or disable auto",
+                "${CC.GRAY}vanish on your account.",
                 "",
-                "${CC.WHITE}Current: ${CC.YELLOW}${
+                "${CC.WHITE}Current: ${CC.GREEN}${
                     profile.staffAutoVanishEnabled
                 }",
                 "",
@@ -114,10 +114,10 @@ class StaffSettingsMenu : Menu("Staff Settings")
                 }Filtered Messages"
             )
             .addToLore(
-                "${CC.WHITE}Enable or disable receival",
-                "${CC.WHITE}of filtered messages.",
+                "${CC.GRAY}Enable or disable receival",
+                "${CC.GRAY}of filtered messages.",
                 "",
-                "${CC.WHITE}Current: ${CC.YELLOW}${
+                "${CC.WHITE}Current: ${CC.GREEN}${
                     !lemonProfile.hasMetadata("filter-disabled")
                 }",
                 "",

@@ -7,6 +7,7 @@ import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.staff.reports.ReportProcessor
 import gg.scala.staff.reports.ViewReportsMenu
+import net.evilblock.cubed.util.CC
 
 /**
  * @author GrowlyX
@@ -18,22 +19,24 @@ import gg.scala.staff.reports.ViewReportsMenu
 object ReportsCommand : ScalaCommand()
 {
     @Default
-    fun onReports(player: ScalaPlayer) = ReportProcessor
-        .getAllReports()
-        .thenAccept {
-            ViewReportsMenu(it).openMenu(player.bukkit())
-        }
+    fun onReports(player: ScalaPlayer)
+    {
+        player.sendMessage("${CC.GRAY}Loading recent reports...")
+
+        ViewReportsMenu(ReportProcessor::getAllReports)
+            .openMenu(player.bukkit())
+    }
 
     @Subcommand("for")
     @CommandCompletion("@players")
     fun onReports(player: ScalaPlayer, target: AsyncLemonPlayer) = target
         .validatePlayers(player.bukkit(), false) {
-            ReportProcessor
-                .getAllReportsOnUser(it.uniqueId)
-                .thenAccept { reports ->
-                    ViewReportsMenu(reports, "for ${it.name}")
-                        .openMenu(player.bukkit())
-                }
-                .join()
+            ViewReportsMenu(
+                reports = {
+                    ReportProcessor
+                        .getAllReportsOnUser(it.uniqueId)
+                },
+                source = "for ${it.name}"
+            ).openMenu(player.bukkit())
         }
 }
