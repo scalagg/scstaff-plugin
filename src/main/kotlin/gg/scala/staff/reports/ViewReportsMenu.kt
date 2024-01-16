@@ -21,7 +21,8 @@ import org.bukkit.entity.Player
  * @since 1/16/2024
  */
 data class ViewReportsMenu(
-    private val reports: List<PlayerReport>
+    private val reports: List<PlayerReport>,
+    private val source: String = ""
 ) : PaginatedMenu()
 {
     init
@@ -158,5 +159,5 @@ data class ViewReportsMenu(
     }
 
     override fun getPrePaginatedTitle(player: Player) =
-        "Viewing unresolved reports..."
+        "Viewing unresolved reports$source..."
 }
