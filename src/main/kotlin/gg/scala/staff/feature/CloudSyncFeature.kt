@@ -1,6 +1,7 @@
 package gg.scala.staff.feature
 
 import gg.scala.cloudsync.shared.discovery.CloudSyncDiscoveryService
+import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.commons.annotations.plugin.SoftDependency
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
@@ -20,7 +21,9 @@ object CloudSyncFeature
     {
         CloudSyncDiscoveryService.discoverable.assets
             .add(
-                "gg.scala.staff:scala-scstaff-plugin:scstaff-plugin"
+                "gg.scala.staff:scala-scstaff-plugin:scstaff-plugin${
+                    if ("dev" in ServerSync.getLocalGameServer().groups) ":gradle-dev" else ""
+                }"
             )
     }
 }
