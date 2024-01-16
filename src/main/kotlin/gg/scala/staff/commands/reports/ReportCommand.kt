@@ -32,18 +32,6 @@ object ReportCommand : ScalaCommand()
     @Inject
     lateinit var plugin: ExtendedScalaPlugin
 
-    // if (target.bukkitPlayer!!.uniqueId == player.uniqueId)
-    //        {
-    //            throw ConditionFailedException("You're not allowed to report yourself.")
-    //        }
-    //
-    //        if (target.hasPermission("scstaff.command.report.bypass"))
-    //        {
-    //            throw ConditionFailedException("You're unable to report ${CC.SEC}${target.getColoredName()}${CC.RED}.")
-    //        }
-    //
-
-
     @CommandAlias("report")
     @CommandCompletion("@players")
     @CommandPermission("scstaff.command.report")
@@ -52,9 +40,11 @@ object ReportCommand : ScalaCommand()
         .thenCompose {
             if (it != null)
             {
-                throw ConditionFailedException("${CC.RED}You must wait ${CC.BOLD}${
-                    DurationFormatUtils.formatDurationWords(it - System.currentTimeMillis(), true, true)
-                }${CC.RED} before reporting again.")
+                throw ConditionFailedException(
+                    "${CC.RED}You must wait ${CC.BOLD}${
+                        DurationFormatUtils.formatDurationWords(it - System.currentTimeMillis(), true, true)
+                    }${CC.RED} before reporting again."
+                )
             }
 
             return@thenCompose target
@@ -69,6 +59,17 @@ object ReportCommand : ScalaCommand()
                             "The player ${CC.YELLOW}${lemonPlayer.name}${CC.RED} is not logged onto the network."
                         )
                     }
+
+                    if (lemonPlayer.uniqueId == player.uniqueId)
+                    {
+                        throw ConditionFailedException("You're not allowed to report yourself.")
+                    }
+
+                    if (lemonPlayer.hasPermission("scstaff.command.report.bypass"))
+                    {
+                        throw ConditionFailedException("You're unable to report ${CC.YELLOW}${lemonPlayer.name}${CC.RED}.")
+                    }
+
 
                     plugin.flavor()
                         .injected<ReportMenu>(lemonPlayer.uniqueId)

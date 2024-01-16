@@ -5,6 +5,8 @@ import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Sorts
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import gg.scala.lemon.handler.PlayerHandler
+import gg.scala.lemon.player.LemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.reports.model.Priority
@@ -132,7 +134,8 @@ object ReportProcessor
     }
 
     fun processReport(
-        player: Player, target: UUID, type: ReportType, reason: String? = null
+        player: Player, target: UUID, type: ReportType,
+        reason: String? = null
     ): CompletableFuture<Void>
     {
         val millis = TimeUnit.SECONDS.toMillis(90L)
@@ -153,7 +156,37 @@ object ReportProcessor
                 )
             }
             .toCompletableFuture()
-            .thenRun {
+            .thenComposeAsync {
+                val onlineAccount = PlayerHandler.find(target)
+                    ?: return@thenComposeAsync PlayerHandler
+                        .fetchAlternateAccountsFor(target)
+                        .thenApply {
+                            it.map(LemonPlayer::uniqueId).toSet()
+                        }
+
+                CompletableFuture.completedFuture(
+                    onlineAccount.cachedAlternateAccounts.toSet()
+                )
+            }
+            .thenComposeAsync {
+                val playerReport = PlayerReport(
+                    from = player.uniqueId,
+                    to = target, category = type,
+                    playerProvidedContext = reason,
+                    serverProvidedContext = additionalServerDataProviders
+                        .joinToString(", ") { block ->
+                            block.invoke(player, target)
+                                .map { entry ->
+                                    "${entry.key}: ${entry.value}"
+                                }
+                                .joinToString(", ")
+                        },
+                    relatedAccounts = it
+                )
+
+                playerReport.save()
+            }
+            .thenRunAsync {
                 StaffMessageStream.send(
                     "${CC.YELLOW}${
                         QuickAccess.computeColoredName(player.uniqueId, player.name).join()

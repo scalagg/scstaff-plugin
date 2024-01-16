@@ -20,7 +20,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven("https://repo.dmulloy2.net/repository/public/")
         configureScalaRepository()
     }
 }
