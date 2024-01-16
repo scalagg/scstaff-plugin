@@ -38,7 +38,7 @@ class ReportMenu(
                 .name("${CC.GREEN}${reportType.fancyName}")
                 .apply {
                     reportType.examples.forEach {
-                        addToLore("${CC.WHITE}${Constants.THIN_VERTICAL_LINE} ${CC.GRAY}$it")
+                        addToLore("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}$it")
                     }
                 }
                 .addToLore(
@@ -110,7 +110,7 @@ class ReportMenu(
                         ReportProcessor
                             .processReport(player, target, reportType)
                             .thenRun {
-                                player.sendMessage("${CC.GREEN}Your report has been submitted! A staff member will respond to this report as soon as possible.")
+                                player.sendMessage("${CC.B_GREEN}Your report has been submitted! A staff member will respond to this report as soon as possible.")
 
                                 Button.playNeutral(player)
                             }

@@ -11,9 +11,11 @@ import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.pagination.PaginatedMenu
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Constants
+import net.evilblock.cubed.util.bukkit.FancyMessage
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 import net.evilblock.cubed.util.text.TextSplitter
 import net.evilblock.cubed.util.time.DateUtil
+import net.md_5.bungee.api.chat.ClickEvent
 import org.bukkit.entity.Player
 import java.util.concurrent.CompletableFuture
 
@@ -49,6 +51,9 @@ data class ViewReportsMenu(
             val userIsOnline = QuickAccess.online(report.to).join()
             val lastLogin = QuickAccess.getLastOnline(report.to).join()
                 ?: System.currentTimeMillis()
+
+            val responseActions = ReportProcessor
+                .reduceAllActionProviders(player, report)
 
             buttons[buttons.size] = ItemBuilder
                 .of(report.priority.iconMaterial)
@@ -122,9 +127,14 @@ data class ViewReportsMenu(
                 .addToLore(
                     "${CC.GRAY}Server: ${CC.WHITE}${report.fromServer}",
                     "",
-                    "${CC.YELLOW}Click to resolve!"
                 )
                 .apply {
+                    if (responseActions.isNotEmpty())
+                    {
+                        addToLore("${CC.YELLOW}Click to take action!")
+                    }
+
+                    addToLore("${CC.GOLD}Right-Click to resolve!")
                     if (report.priority != Priority.High)
                     {
                         addToLore("${CC.RED}Shift-Click to escalate!")
@@ -146,18 +156,54 @@ data class ViewReportsMenu(
                         return@toButton
                     }
 
-                    DataStoreObjectControllerCache
-                        .findNotNull<PlayerReport>()
-                        .delete(
-                            report.identifier,
-                            DataStoreStorageType.MONGO
-                        )
-                        .thenRun {
-                            player.sendMessage("${CC.RED}The report has been resolved!")
-                            Button.playSuccess(player)
+                    if (type.isLeftClick && responseActions.isNotEmpty())
+                    {
+                        player.closeInventory()
+                        player.sendMessage("${CC.D_GREEN}${CC.STRIKE_THROUGH}${"-".repeat(45)}")
+                        player.sendMessage("${CC.GREEN}Take Action ${CC.GRAY}(click the messages)${CC.GREEN}:")
 
-                            openMenu(player)
+                        responseActions.forEach {
+                            val fancyMessage = FancyMessage()
+                                .withMessage(
+                                    "${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}${CC.UNDERLINE}"
+                                )
+                                .withMessage(it.description)
+                                .andHoverOf(
+                                    "${CC.RED}Click to select this action!"
+                                )
+                                .andCommandOf(
+                                    ClickEvent.Action.RUN_COMMAND,
+                                    "/${it.command}"
+                                )
+
+                            fancyMessage.sendToPlayer(player)
                         }
+
+                        player.sendMessage("${CC.D_GREEN}${CC.STRIKE_THROUGH}${"-".repeat(45)}")
+                        return@toButton
+                    }
+
+                    if (type.isRightClick)
+                    {
+                        DataStoreObjectControllerCache
+                            .findNotNull<PlayerReport>()
+                            .delete(
+                                report.identifier,
+                                DataStoreStorageType.MONGO
+                            )
+                            .thenRun {
+                                player.sendMessage("${CC.RED}The report has been resolved!")
+                                Button.playSuccess(player)
+
+                                openMenu(player)
+                            }
+                            .thenComposeAsync {
+                                QuickAccess.sendGlobalPlayerMessage(
+                                    "${CC.GREEN}Your report to ${report.to.username()} has been resolved by a staff member. Thank you for helping keep our server safe!",
+                                    report.from
+                                )
+                            }
+                    }
                 }
         }
 
@@ -165,5 +211,7 @@ data class ViewReportsMenu(
     }
 
     override fun getPrePaginatedTitle(player: Player) =
-        "Viewing unresolved reports$source..."
+        "Viewing unresolved reports${
+            if (source.isNotEmpty()) " $source" else ""
+        }..."
 }
