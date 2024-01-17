@@ -27,7 +27,7 @@ object StaffMessageStream
     @Inject
     lateinit var plugin: ScalaStaffPlugin
 
-    val aware by lazy {
+    private val aware by lazy {
         AwareBuilder
             .of<AwareMessage>(CHANNEL)
             .logger(this.plugin.logger)
@@ -60,7 +60,7 @@ object StaffMessageStream
     )
     {
         AwareMessage.of(
-            "staff-message", this.aware,
+            "staff-message-complex", this.aware,
             "message" to message,
             "from" to ServerSync
                 .getLocalGameServer().id,
@@ -71,7 +71,7 @@ object StaffMessageStream
         )
     }
 
-    inline fun <reified T : Any> AwareMessage.handleStaffMessageOfDelivery(
+    private inline fun <reified T : Any> AwareMessage.handleStaffMessageOfDelivery(
         delivery: (Player, String, T) -> Unit
     )
     {
