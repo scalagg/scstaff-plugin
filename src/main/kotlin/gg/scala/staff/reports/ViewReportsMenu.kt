@@ -95,12 +95,12 @@ data class ViewReportsMenu(
                     {
                         report.relatedAccounts.take(3)
                             .forEach {
-                                addToLore("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}${it.username()}")
+                                addToLore(" ${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}${it.username()}")
                             }
 
                         if (report.relatedAccounts.size > 3)
                         {
-                            addToLore("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} (and ${
+                            addToLore(" ${CC.GRAY}${Constants.THIN_VERTICAL_LINE} (and ${
                                 report.relatedAccounts - 3
                             } more...)")
                         }
@@ -126,9 +126,17 @@ data class ViewReportsMenu(
                 }
                 .addToLore(
                     "${CC.GRAY}Server: ${CC.WHITE}${report.fromServer}",
-                    "",
                 )
                 .apply {
+                    if (report.serverProvidedContext != null)
+                    {
+                        report.serverProvidedContext.split(", ")
+                            .forEach {
+                                addToLore(" ${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}$it")
+                            }
+                    }
+
+                    addToLore("")
                     if (responseActions.isNotEmpty())
                     {
                         addToLore("${CC.YELLOW}Click to take action!")

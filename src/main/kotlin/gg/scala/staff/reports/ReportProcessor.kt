@@ -13,6 +13,7 @@ import gg.scala.staff.reports.model.Priority
 import gg.scala.staff.reports.model.PlayerReport
 import gg.scala.staff.reports.model.wrapper.WBsonDate
 import gg.scala.staff.reports.model.wrapper.BsonDateTimeGsonSerializer
+import gg.scala.staff.stream.Message
 import gg.scala.staff.stream.StaffMessageStream
 import gg.scala.store.controller.DataStoreObjectControllerCache
 import gg.scala.store.storage.type.DataStoreStorageType
@@ -20,6 +21,7 @@ import io.lettuce.core.api.StatefulRedisConnection
 import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
+import net.md_5.bungee.api.chat.ClickEvent
 import org.bson.conversions.Bson
 import org.bukkit.entity.Player
 import java.util.*
@@ -240,19 +242,34 @@ object ReportProcessor
                 getAllReportsOnUser(target)
             }
             .thenAcceptAsync {
-                // TODO: once in prod, separate lines properly for 1.7 players
-                StaffMessageStream.send(
-                    "${CC.YELLOW}${
-                        QuickAccess.computeColoredName(player.uniqueId, player.name).join()
-                    }${CC.RED} has reported ${CC.YELLOW}${
-                        QuickAccess.computeColoredName(target, target.username()).join()
-                    }${CC.RED} for ${CC.GOLD}${type.fancyName}${CC.RED}${
-                        if (reason != null) " ${CC.GRAY}($reason)${CC.RED}" else ""
-                    }.\n    ${
-                        "${CC.GRAY}(${CC.B}${it.size}${CC.GRAY} report${if (it.size == 1) "" else "s"} last 5m, ${
-                            "${CC.B}${it.count { report -> report.from == player.uniqueId }}${CC.GRAY} from same user"
-                        })"
-                    }",
+                fun Message.viewReportAttributes() = andHoverOf("${CC.GREEN}Click to view reports!")
+                    .andCommandOf(
+                        ClickEvent.Action.RUN_COMMAND,
+                        "/viewreports for $target"
+                    )
+
+                val complex = Message()
+                    .withMessage(
+                        "${CC.YELLOW}${
+                            QuickAccess.computeColoredName(player.uniqueId, player.name).join()
+                        }${CC.RED} has reported ${CC.YELLOW}${
+                            QuickAccess.computeColoredName(target, target.username()).join()
+                        }${CC.RED} for ${CC.GOLD}${type.fancyName}${CC.RED}${
+                            if (reason != null) " ${CC.GRAY}($reason)${CC.RED}" else ""
+                        }."
+                    )
+                    .viewReportAttributes()
+                    .withMessage(
+                        "    ${
+                            "${CC.GRAY}(${CC.B}${it.size}${CC.GRAY} report${if (it.size == 1) "" else "s"} last 5m, ${
+                                "${CC.B}${it.count { report -> report.from == player.uniqueId }}${CC.GRAY} from same user"
+                            })"
+                        }"
+                    )
+                    .viewReportAttributes()
+
+                StaffMessageStream.sendComplex(
+                    message = complex,
                     mustNotHaveMetadata = "reports-disabled"
                 )
             }
