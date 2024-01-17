@@ -66,10 +66,11 @@ object ReportCommand : ScalaCommand()
                         throw ConditionFailedException("You're not allowed to report yourself.")
                     }
 
-                    if (lemonPlayer.hasPermission("scstaff.command.report.bypass", checkType = PermissionCheck.COMPOUNDED))
+                    // TODO: proper permisison load
+                    /*if ("scstaff.command.report.bypass" in lemonPlayer)
                     {
                         throw ConditionFailedException("You're unable to report ${CC.YELLOW}${lemonPlayer.name}${CC.RED}.")
-                    }
+                    }*/
 
                     plugin.flavor()
                         .injected<ReportMenu>(lemonPlayer.uniqueId)

@@ -128,9 +128,9 @@ data class ViewReportsMenu(
                     "${CC.GRAY}Server: ${CC.WHITE}${report.fromServer}",
                 )
                 .apply {
-                    if (report.serverProvidedContext != null)
+                    if (report.serverProvidedContext.isNullOrEmpty().not())
                     {
-                        report.serverProvidedContext.split(", ")
+                        report.serverProvidedContext!!.split(", ")
                             .forEach {
                                 addToLore(" ${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}$it")
                             }
