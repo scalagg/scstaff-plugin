@@ -117,7 +117,7 @@ object StaffMessageStream
         this.aware.listen("staff-message-complex") {
             handleStaffMessageOfDelivery<Message> { player, prefix, message ->
                 val newMessage = Message()
-                newMessage.components += message.components
+                newMessage.components += message.components.toList()
 
                 val firstComponent = newMessage.components.first()
                 firstComponent.value = "$prefix${firstComponent.value}"
