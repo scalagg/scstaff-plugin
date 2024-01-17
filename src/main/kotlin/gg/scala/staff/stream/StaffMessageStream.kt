@@ -10,6 +10,7 @@ import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.profile.StaffProfileService
+import net.evilblock.cubed.serializers.Serializers
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
@@ -61,7 +62,7 @@ object StaffMessageStream
     {
         AwareMessage.of(
             "staff-message-complex", this.aware,
-            "message" to message,
+            "message" to Serializers.gson.toJson(message),
             "from" to ServerSync
                 .getLocalGameServer().id,
             "includeFrom" to includeOrigin,

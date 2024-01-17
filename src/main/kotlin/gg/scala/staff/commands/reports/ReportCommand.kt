@@ -11,6 +11,7 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.flavor.inject.Inject
 import gg.scala.lemon.player.LemonPlayer
+import gg.scala.lemon.player.enums.PermissionCheck
 import gg.scala.lemon.player.wrapper.AsyncLemonPlayer
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.config
@@ -65,11 +66,10 @@ object ReportCommand : ScalaCommand()
                         throw ConditionFailedException("You're not allowed to report yourself.")
                     }
 
-                    if (lemonPlayer.hasPermission("scstaff.command.report.bypass"))
+                    if (lemonPlayer.hasPermission("scstaff.command.report.bypass", checkType = PermissionCheck.COMPOUNDED))
                     {
                         throw ConditionFailedException("You're unable to report ${CC.YELLOW}${lemonPlayer.name}${CC.RED}.")
                     }
-
 
                     plugin.flavor()
                         .injected<ReportMenu>(lemonPlayer.uniqueId)
