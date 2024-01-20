@@ -33,7 +33,7 @@ object SendMockAlertCommand : ScalaCommand()
         Bukkit.getPluginManager().callEvent(
             AntiCheatAlertEvent(
                 player.bukkit(),
-                CheckType.CLIENT,
+                CheckType.DOUBLE_CLICK,
                 "test",
                 2.0
             )
