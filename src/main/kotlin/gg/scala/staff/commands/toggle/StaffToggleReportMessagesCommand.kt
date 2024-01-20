@@ -37,7 +37,7 @@ object StaffToggleReportMessagesCommand : ScalaCommand()
                         "${ChatColor.GREEN}You will now receive report messages."
                     } else
                     {
-                        "${ChatColor.RED}You are no receiving report messages."
+                        "${ChatColor.RED}You are no longer receiving report messages."
                     }
                 )
             }

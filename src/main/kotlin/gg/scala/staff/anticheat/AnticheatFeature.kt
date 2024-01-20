@@ -186,11 +186,6 @@ object AnticheatFeature
 
         aware.listen("incoming") {
             val serverID = retrieve<String>("server")
-            if (serverID == ServerSync.getLocalGameServer().id)
-            {
-                return@listen
-            }
-
             val alert = Serializers.gson.fromJson(
                 retrieve<String>("alert"),
                 AnticheatAlert::class.java

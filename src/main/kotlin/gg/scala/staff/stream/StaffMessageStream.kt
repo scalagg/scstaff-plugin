@@ -73,7 +73,8 @@ object StaffMessageStream
     }
 
     private inline fun <reified T : Any> AwareMessage.handleStaffMessageOfDelivery(
-        delivery: (Player, String, T) -> Unit
+        parseMessage: (String, T) -> T,
+        delivery: (Player, T) -> Unit
     )
     {
         val content = this.retrieve<T>("message")
@@ -87,6 +88,7 @@ object StaffMessageStream
         val baseMessage = "${ChatColor.AQUA}[S] ${
             if (includeFrom) "${ChatColor.DARK_AQUA}[$from] " else ""
         }"
+        val message = parseMessage(baseMessage, content)
 
         Bukkit.getOnlinePlayers().filter {
             val profile = StaffProfileService.find(it)
@@ -101,7 +103,7 @@ object StaffMessageStream
 
             ((additionalFlag == null || additionalFlag == "null") || flag) && ableToReceive
         }.forEach {
-            delivery(it, baseMessage, content)
+            delivery(it, message)
         }
     }
 
@@ -109,20 +111,25 @@ object StaffMessageStream
     fun configure()
     {
         this.aware.listen("staff-message") {
-            handleStaffMessageOfDelivery<String> { player, prefix, message ->
-                player.sendMessage("$prefix$message")
-            }
+            handleStaffMessageOfDelivery<String>(
+                parseMessage = { prefix, message -> "$prefix$message" },
+                delivery = { player, message ->
+                    player.sendMessage(message)
+                }
+            )
         }
 
         this.aware.listen("staff-message-complex") {
-            handleStaffMessageOfDelivery<Message> { player, prefix, message ->
-                val newMessage = Message()
-                newMessage.components += message.components.toList()
-
-                val firstComponent = newMessage.components.first()
-                firstComponent.value = "$prefix${firstComponent.value}"
-                newMessage.sendToPlayer(player)
-            }
+            handleStaffMessageOfDelivery<Message>(
+                parseMessage = { prefix, message ->
+                    val firstComponent = message.components.first()
+                    firstComponent.value = "$prefix${firstComponent.value}"
+                    message
+                },
+                delivery = { player, message ->
+                    message.sendToPlayer(player)
+                }
+            )
         }
 
         this.aware.connect()
