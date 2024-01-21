@@ -26,7 +26,7 @@ allprojects {
 
 dependencies {
     compileOnly(kotlin("stdlib"))
-    compileOnly(fileTree("lib"))
+    api(fileTree("lib"))
 
     kapt("gg.scala.commons:bukkit:3.4.5")
     compileOnly("gg.scala.commons:bukkit:3.4.5")
