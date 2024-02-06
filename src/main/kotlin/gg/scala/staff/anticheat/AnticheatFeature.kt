@@ -172,14 +172,14 @@ object AnticheatFeature
                         )
                         .publish(AwareThreadContext.ASYNC)
 
-                    when (true)
+                    /*when (true)
                     {
                         (it.type == CheckType.TIMER && it.violations >= 15.0) ->
                             it.player.runAutoBanFor("ETV")
                         (it.type == CheckType.REACH && it.violations >= 10.0) ->
                             it.player.runAutoBanFor("ERV")
                         else -> {}
-                    }
+                    }*/
                 }
                 .bindWith(plugin)
         }
