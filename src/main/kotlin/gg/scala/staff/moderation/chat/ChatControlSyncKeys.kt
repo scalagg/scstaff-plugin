@@ -10,11 +10,13 @@ import gg.scala.lemon.Lemon
  */
 object ChatControlSyncKeys : DataSyncKeys
 {
-    override fun store() = keyOf("asd", "configuration")
-    override fun newStore() = "ccontrol:${
-        if (Lemon.instance.settings.defaultChatGsd) 
+    private val chatControlLocalID by lazy {
+        if (Lemon.instance.settings.defaultChatGsd)
             Lemon.instance.settings.defaultChatGsdGroupId else
-                ServerSync.local.id
-    }"
-    override fun sync() = keyOf(ServerSync.getLocalGameServer().groups.first(), "ccontrol")
+            ServerSync.local.id
+    }
+
+    override fun store() = keyOf("asd", "configuration")
+    override fun newStore() = "ccontrol:$chatControlLocalID"
+    override fun sync() = keyOf(chatControlLocalID, "ccontrol")
 }
