@@ -301,6 +301,9 @@ object ModerationService
         player.setMetadata("vanish-power", FixedMetadataValue(plugin, power))
 
         player.playerListName = "${CC.GRAY}[V] ${player.name}"
+
+        NametagHandler.reloadPlayer(player)
+        VisibilityHandler.update(player)
     }
 
     fun leaveVanish(player: Player, update: Boolean = true)
