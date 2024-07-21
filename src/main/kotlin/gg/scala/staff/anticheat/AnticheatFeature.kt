@@ -1,23 +1,21 @@
 package gg.scala.staff.anticheat
 
-import dev.sim0n.anticheat.check.CheckType
-import dev.sim0n.anticheat.event.AntiCheatAlertEvent
 import gg.scala.aware.AwareBuilder
 import gg.scala.aware.codec.codecs.interpretation.AwareMessageCodec
 import gg.scala.aware.message.AwareMessage
 import gg.scala.aware.thread.AwareThreadContext
 import gg.scala.commons.agnostic.sync.ServerSync
-import gg.scala.commons.annotations.plugin.SoftDependency
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
-import gg.scala.flavor.service.ignore.IgnoreAutoScan
 import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.anticheat.sampling.SixtySecondSample
 import gg.scala.staff.anticheat.sampling.TenSecondSample
 import gg.scala.staff.profile.StaffProfileService
-import gg.scala.staff.stream.StaffMessageStream
+import me.liwk.karhu.api.KarhuAPI
+import me.liwk.karhu.api.event.KarhuListener
+import me.liwk.karhu.api.event.impl.KarhuAlertEvent
 import me.lucko.helper.Events
 import me.lucko.helper.Schedulers
 import me.lucko.helper.terminable.composite.CompositeTerminable
@@ -28,9 +26,8 @@ import net.evilblock.cubed.util.bukkit.FancyMessage
 import net.md_5.bungee.api.chat.ClickEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerQuitEvent
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -53,8 +50,7 @@ object AnticheatFeature
 
     data class AbstractAnticheatAlert(
         val player: Player,
-        val type: AnticheatCheck,
-        val label: String,
+        val type: String,
         val violations: Double
     )
 
@@ -96,18 +92,25 @@ object AnticheatFeature
             }, 0L, TimeUnit.SECONDS, 1L, TimeUnit.SECONDS)
             .bindWith(terminable)
 
-        Events
-            .subscribe(
-                AntiCheatAlertEvent::class.java,
-                EventPriority.HIGHEST
-            )
-            .filter {
-                it.player.uniqueId == player.uniqueId
+        val eventListener = KarhuListener {
+            if (it !is KarhuAlertEvent)
+            {
+                return@KarhuListener
             }
-            .handler {
-                sixtySecondSample.useCurrentSample(TenSecondSample::triggerAlert)
+
+            if (it.player.uniqueId != player.uniqueId)
+            {
+                return@KarhuListener
             }
-            .bindWith(terminable)
+
+            sixtySecondSample.useCurrentSample(TenSecondSample::triggerAlert)
+        }
+
+        KarhuAPI.getEventRegistry().addListener(eventListener)
+
+        terminable.with {
+            KarhuAPI.getEventRegistry().removeListener(eventListener)
+        }
 
         Events
             .subscribe(PlayerQuitEvent::class.java)
@@ -126,11 +129,10 @@ object AnticheatFeature
         data class AnticheatAlert(
             val playerID: UUID,
             val checkType: String,
-            val label: String,
             val violations: Double
         )
 
-        if (plugin.server.pluginManager.isPluginEnabled("anticheat"))
+        if (plugin.server.pluginManager.isPluginEnabled("KarhuLoader"))
         {
             fun Player.runAutoBanFor(reason: String)
             {
@@ -140,48 +142,27 @@ object AnticheatFeature
                 )
             }
 
-            Events
-                .subscribe(AntiCheatAlertEvent::class.java, EventPriority.MONITOR)
-                .handler {
-                    if (alertFilter(
+            KarhuAPI.getEventRegistry().addListener {
+                if (it !is KarhuAlertEvent)
+                {
+                    return@addListener
+                }
+
+                AwareMessage
+                    .of(
+                        "incoming",
+                        this.aware,
+                        "server" to ServerSync.getLocalGameServer().id,
+                        "alert" to Serializers.gson.toJson(
                             AbstractAnticheatAlert(
                                 player = it.player,
-                                type = AnticheatCheck.valueOf(it.type.name),
-                                label = it.label,
-                                violations = it.violations
-                            )
-                        ))
-                    {
-                        it.isCancelled = true
-                        return@handler
-                    }
-
-                    AwareMessage
-                        .of(
-                            "incoming",
-                            this.aware,
-                            "server" to ServerSync.getLocalGameServer().id,
-                            "alert" to Serializers.gson.toJson(
-                                AnticheatAlert(
-                                    playerID = it.player.uniqueId,
-                                    checkType = it.type.getName(),
-                                    violations = it.violations,
-                                    label = it.label
-                                )
+                                type = it.check.name,
+                                violations = it.violations.toDouble()
                             )
                         )
-                        .publish(AwareThreadContext.ASYNC)
-
-                    /*when (true)
-                    {
-                        (it.type == CheckType.TIMER && it.violations >= 15.0) ->
-                            it.player.runAutoBanFor("ETV")
-                        (it.type == CheckType.REACH && it.violations >= 10.0) ->
-                            it.player.runAutoBanFor("ERV")
-                        else -> {}
-                    }*/
-                }
-                .bindWith(plugin)
+                    )
+                    .publish(AwareThreadContext.ASYNC)
+            }
         }
 
         aware.listen("incoming") {
@@ -193,9 +174,7 @@ object AnticheatFeature
 
             val fancyMessage = FancyMessage()
                 .withMessage(
-                    "${CC.RED}[AC] ${CC.D_RED}[$serverID] ${CC.WHITE}${alert.playerID.username()}${CC.RED} failed ${CC.B_WHITE}${alert.checkType}${
-                        if (alert.label.isNotBlank()) " ${alert.label}" else ""
-                    }${CC.RED}.${
+                    "${CC.RED}[AC] ${CC.D_RED}[$serverID] ${CC.WHITE}${alert.playerID.username()}${CC.RED} failed ${CC.B_WHITE}${alert.checkType}${CC.RED}.${
                         " ${CC.GRAY}(VL: ${alert.violations})"
                     }"
                 )
