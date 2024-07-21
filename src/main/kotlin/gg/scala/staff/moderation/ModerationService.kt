@@ -248,6 +248,22 @@ object ModerationService
                         lemonPlayer.activeGrant?.apply {
                             enterVanish(it.player, this.getRank().weight)
                         }
+                    } else
+                    {
+                        Tasks.async {
+                            ScalaCommonsSpigot.instance.kvConnection.sync()
+                                .apply {
+                                    hdel("vanish:${it.player.uniqueId}")
+                                }
+                        }
+                    }
+                } else
+                {
+                    Tasks.async {
+                        ScalaCommonsSpigot.instance.kvConnection.sync()
+                            .apply {
+                                hdel("vanish:${it.player.uniqueId}")
+                            }
                     }
                 }
 

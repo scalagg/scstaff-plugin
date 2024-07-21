@@ -63,7 +63,7 @@ object StaffFreezeCommand : ScalaCommand()
             )
 
             Tasks.async {
-                PostFreezeEvent(target.bukkitPlayer!!).flow().subscribe()
+                PostFreezeEvent(target.bukkitPlayer!!).callEvent()
             }
 
             FrozenPlayerHandler.expirables[target.bukkitPlayer!!.uniqueId] = FrozenPlayerHandler.FrozenExpirable()
