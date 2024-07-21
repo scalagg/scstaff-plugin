@@ -19,6 +19,7 @@ import gg.scala.staff.profile.StaffProfile
 import gg.scala.staff.profile.StaffProfileService
 import gg.scala.staff.stream.StaffMessageStream
 import me.lucko.helper.Events
+import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.nametag.NametagHandler
 import net.evilblock.cubed.scoreboard.ScoreboardHandler
 import net.evilblock.cubed.util.CC
@@ -297,6 +298,16 @@ object ModerationService
 
     fun enterVanish(player: Player, power: Int = 0)
     {
+        Tasks.async {
+            ScalaCommonsSpigot.instance.kvConnection.sync()
+                .apply {
+                    hset("vanish:${player.uniqueId}", mapOf(
+                        "enabled" to "true",
+                        "power" to power.toString()
+                    ))
+                }
+        }
+
         player.setMetadata("vanished", FixedMetadataValue(plugin, true))
         player.setMetadata("vanish-power", FixedMetadataValue(plugin, power))
 
@@ -308,6 +319,13 @@ object ModerationService
 
     fun leaveVanish(player: Player, update: Boolean = true)
     {
+        Tasks.async {
+            ScalaCommonsSpigot.instance.kvConnection.sync()
+                .apply {
+                    hdel("vanish:${player.uniqueId}")
+                }
+        }
+
         player.removeMetadata("vanished", plugin)
         player.removeMetadata("vanish-power", plugin)
 
