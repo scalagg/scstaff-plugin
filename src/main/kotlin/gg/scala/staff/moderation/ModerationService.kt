@@ -253,7 +253,7 @@ object ModerationService
                         Tasks.async {
                             ScalaCommonsSpigot.instance.kvConnection.sync()
                                 .apply {
-                                    hdel("vanish:${it.player.uniqueId}")
+                                    del("vanish:${it.player.uniqueId}")
                                 }
                         }
                     }
@@ -262,7 +262,7 @@ object ModerationService
                     Tasks.async {
                         ScalaCommonsSpigot.instance.kvConnection.sync()
                             .apply {
-                                hdel("vanish:${it.player.uniqueId}")
+                                del("vanish:${it.player.uniqueId}")
                             }
                     }
                 }
@@ -338,7 +338,7 @@ object ModerationService
         Tasks.async {
             ScalaCommonsSpigot.instance.kvConnection.sync()
                 .apply {
-                    hdel("vanish:${player.uniqueId}")
+                    del("vanish:${player.uniqueId}")
                 }
         }
 
