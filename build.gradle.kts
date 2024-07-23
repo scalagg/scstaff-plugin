@@ -32,7 +32,7 @@ dependencies {
     kapt("gg.scala.commons:bukkit:3.4.5")
     compileOnly("gg.scala.commons:bukkit:3.4.5")
 
-    compileOnly("com.github.Karhu-Anticheat:KarhuAPI:eb5d50297e")
+    api("com.github.Karhu-Anticheat:KarhuAPI:eb5d50297e")
 
     compileOnly("gg.scala.store:spigot:0.1.8")
     compileOnly("gg.scala.basics.plugin:scala-basics-plugin:1.0.5")

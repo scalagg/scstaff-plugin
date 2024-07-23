@@ -327,8 +327,6 @@ object ModerationService
         player.setMetadata("vanished", FixedMetadataValue(plugin, true))
         player.setMetadata("vanish-power", FixedMetadataValue(plugin, power))
 
-        player.playerListName = "${CC.GRAY}[V] ${player.name}"
-
         NametagHandler.reloadPlayer(player)
         VisibilityHandler.update(player)
     }
