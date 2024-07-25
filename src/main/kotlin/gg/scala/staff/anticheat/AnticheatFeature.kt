@@ -21,7 +21,6 @@ import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.FancyMessage
 import net.md_5.bungee.api.chat.ClickEvent
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
@@ -113,7 +112,6 @@ object AnticheatFeature
             )
             .publish(AwareThreadContext.ASYNC)
     }
-
 
     data class AnticheatAlert(
         val playerID: UUID,
