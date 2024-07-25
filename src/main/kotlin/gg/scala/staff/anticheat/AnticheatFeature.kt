@@ -13,9 +13,6 @@ import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.anticheat.sampling.SixtySecondSample
 import gg.scala.staff.anticheat.sampling.TenSecondSample
 import gg.scala.staff.profile.StaffProfileService
-import me.liwk.karhu.api.KarhuAPI
-import me.liwk.karhu.api.event.KarhuListener
-import me.liwk.karhu.api.event.impl.KarhuAlertEvent
 import me.lucko.helper.Events
 import me.lucko.helper.Schedulers
 import me.lucko.helper.terminable.composite.CompositeTerminable
@@ -92,26 +89,6 @@ object AnticheatFeature
             }, 0L, TimeUnit.SECONDS, 1L, TimeUnit.SECONDS)
             .bindWith(terminable)
 
-        val eventListener = KarhuListener {
-            if (it !is KarhuAlertEvent)
-            {
-                return@KarhuListener
-            }
-
-            if (it.player.uniqueId != player.uniqueId)
-            {
-                return@KarhuListener
-            }
-
-            sixtySecondSample.useCurrentSample(TenSecondSample::triggerAlert)
-        }
-
-        KarhuAPI.getEventRegistry().addListener(eventListener)
-
-        terminable.with {
-            KarhuAPI.getEventRegistry().removeListener(eventListener)
-        }
-
         Events
             .subscribe(PlayerQuitEvent::class.java)
             .filter { it.player.uniqueId == player.uniqueId  }
@@ -123,48 +100,30 @@ object AnticheatFeature
         return terminable
     }
 
+    fun onAnticheatAlert(alert: AbstractAnticheatAlert)
+    {
+        AwareMessage
+            .of(
+                "incoming",
+                this.aware,
+                "server" to ServerSync.getLocalGameServer().id,
+                "alert" to Serializers.gson.toJson(AnticheatAlert(
+                    alert.player.uniqueId, alert.type, alert.violations
+                ))
+            )
+            .publish(AwareThreadContext.ASYNC)
+    }
+
+
+    data class AnticheatAlert(
+        val playerID: UUID,
+        val checkType: String,
+        val violations: Double
+    )
+
     @Configure
     fun configure()
     {
-        data class AnticheatAlert(
-            val playerID: UUID,
-            val checkType: String,
-            val violations: Double
-        )
-
-        if (plugin.server.pluginManager.isPluginEnabled("KarhuLoader"))
-        {
-            fun Player.runAutoBanFor(reason: String)
-            {
-                Bukkit.dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    "ban $name 30d Unfair Advantage ($reason) -s"
-                )
-            }
-
-            KarhuAPI.getEventRegistry().addListener {
-                if (it !is KarhuAlertEvent)
-                {
-                    return@addListener
-                }
-
-                AwareMessage
-                    .of(
-                        "incoming",
-                        this.aware,
-                        "server" to ServerSync.getLocalGameServer().id,
-                        "alert" to Serializers.gson.toJson(
-                            AbstractAnticheatAlert(
-                                player = it.player,
-                                type = it.check.name,
-                                violations = it.violations.toDouble()
-                            )
-                        )
-                    )
-                    .publish(AwareThreadContext.ASYNC)
-            }
-        }
-
         aware.listen("incoming") {
             val serverID = retrieve<String>("server")
             val alert = Serializers.gson.fromJson(
