@@ -47,14 +47,11 @@ object AnticheatFeature
     data class AbstractAnticheatAlert(
         val player: Player,
         val type: String,
-        val violations: Double
+        val violations: Double,
+        val extraInfo: String
     )
 
-    private var alertFilter: (AbstractAnticheatAlert) -> Boolean = { true }
-    fun configureAlertFilter(block: (AbstractAnticheatAlert) -> Boolean)
-    {
-        this.alertFilter = block
-    }
+    var proxiedPlayerAllowAC = { _: Player -> true }
 
     fun subscribeToSixtySecondSampleOf(
         check: AnticheatCheck, player: Player, evaluate: (SixtySecondSample) -> Unit
@@ -113,10 +110,12 @@ object AnticheatFeature
             .publish(AwareThreadContext.ASYNC)
     }
 
-    data class AnticheatAlert(
+    data class AnticheatAlert
+    @JvmOverloads constructor(
         val playerID: UUID,
         val checkType: String,
-        val violations: Double
+        val violations: Double,
+        val extraInfo: String? = null
     )
 
     @Configure
@@ -135,9 +134,21 @@ object AnticheatFeature
                         " ${CC.GRAY}(VL: ${alert.violations})"
                     }"
                 )
-                .andHoverOf(
-                    "${CC.GREEN}Click to spectate player!"
-                )
+                .apply {
+                    if (alert.extraInfo != null)
+                    {
+                        andHoverOf(
+                            alert.extraInfo,
+                            "",
+                            "${CC.GREEN}Click to spectate player!"
+                        )
+                    } else
+                    {
+                        andHoverOf(
+                            "${CC.GREEN}Click to spectate player!"
+                        )
+                    }
+                }
                 .andCommandOf(
                     ClickEvent.Action.RUN_COMMAND,
                     "/spectate ${alert.playerID}"

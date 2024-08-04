@@ -21,7 +21,8 @@ object ACTestCommand : ScalaCommand()
         AnticheatFeature.onAnticheatAlert(AnticheatFeature.AbstractAnticheatAlert(
             player.bukkit(),
             "Hors",
-            14.0
+            14.0,
+            "hors is mean"
         ))
     }
 

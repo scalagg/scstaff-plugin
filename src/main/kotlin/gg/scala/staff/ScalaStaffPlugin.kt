@@ -30,8 +30,6 @@ import org.bukkit.ChatColor
 
 @PluginDependency("ScBasics", soft = true)
 @PluginDependency("cloudsync", soft = true)
-
-@PluginDependency("KarhuLoader", soft = true)
 class ScalaStaffPlugin : ExtendedScalaPlugin()
 {
     var settingProvider: SettingProvider = LemonSettingProvider
