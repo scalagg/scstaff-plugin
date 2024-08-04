@@ -104,7 +104,7 @@ object AnticheatFeature
                 this.aware,
                 "server" to ServerSync.getLocalGameServer().id,
                 "alert" to Serializers.gson.toJson(AnticheatAlert(
-                    alert.player.uniqueId, alert.type, alert.violations
+                    alert.player.uniqueId, alert.type, alert.violations, alert.extraInfo
                 ))
             )
             .publish(AwareThreadContext.ASYNC)
