@@ -83,7 +83,10 @@ object ModerationService
     @Configure
     fun configure()
     {
-        ScoreboardHandler.scoreboardOverride = ModModeScoreboardOverride
+        if ("miplobby" !in ServerSync.getLocalGameServer().groups)
+        {
+            ScoreboardHandler.scoreboardOverride = ModModeScoreboardOverride
+        }
 
         val scheduler = Executors.newSingleThreadScheduledExecutor()
 
