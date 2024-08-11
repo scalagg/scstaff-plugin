@@ -11,6 +11,7 @@ import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.ScalaStaffPlugin
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.FancyMessage
+import net.evilblock.cubed.util.time.TimeUtil
 import net.md_5.bungee.api.chat.ClickEvent
 
 /**
@@ -20,6 +21,29 @@ import net.md_5.bungee.api.chat.ClickEvent
 @AutoRegister
 object FindPlayerCommand : ScalaCommand()
 {
+    @CommandAlias("lastseen|lastonline")
+    @CommandPermission(ScalaStaffPlugin.STAFF_NODE)
+    fun onLastSeen(player: ScalaPlayer, target: AsyncLemonPlayer) = target
+        .validatePlayers(player.bukkit(), false) {
+            if (QuickAccess.online(it.uniqueId).join() == true)
+            {
+                player.sendMessage("${CC.GREEN}This player is online!")
+                return@validatePlayers
+            }
+
+            val lastSeen = QuickAccess.getLastOnline(it.uniqueId).join()
+                ?: throw ConditionFailedException(
+                    "This player has never joined!"
+                )
+
+            player.sendMessage(
+                "${CC.GREEN}Last seen:",
+                "${CC.WHITE}${
+                    TimeUtil.formatIntoAbbreviatedString(((System.currentTimeMillis() - lastSeen) / 1000L).toInt())
+                }"
+            )
+        }
+
     @CommandAlias("find")
     @CommandPermission(ScalaStaffPlugin.STAFF_NODE)
     fun onFind(player: ScalaPlayer, target: AsyncLemonPlayer) =
