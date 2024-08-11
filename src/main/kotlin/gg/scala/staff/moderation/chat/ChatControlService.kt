@@ -20,7 +20,7 @@ object ChatControlService
     {
         override fun durationFor(t: Player) =
             if (t.hasPermission("scstaff.chat.cooldown.donator"))
-                1000L else 3000L
+                50L else 3000L
     }
 
     object SlowChatCooldown : PlayerCooldown("slow-chat")
