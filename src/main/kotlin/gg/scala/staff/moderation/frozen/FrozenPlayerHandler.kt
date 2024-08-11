@@ -3,6 +3,7 @@ package gg.scala.staff.moderation.frozen
 import gg.scala.commons.annotations.runnables.Repeating
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import gg.scala.lemon.Lemon
 import gg.scala.lemon.listener.PlayerListener
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
@@ -14,6 +15,7 @@ import me.lucko.helper.Events
 import me.lucko.helper.promise.ThreadContext
 import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -36,6 +38,12 @@ object FrozenPlayerHandler : Runnable
                 FrozenPlayerMenu().openMenu(it.player)
             }
 
+        Events
+            .subscribe(PlayerJoinEvent::class.java)
+            .handler {
+                it.player.removeMetadata("frozen", Lemon.instance)
+            }
+
         Events.subscribe(PlayerQuitEvent::class.java)
             .handler {
                 val isFrozen = it.player.hasMetadata("frozen")
@@ -46,7 +54,7 @@ object FrozenPlayerHandler : Runnable
                         "${CC.AQUA}${QuickAccess.coloredName(it.player)}${CC.D_AQUA} logged out while frozen."
                     )
 
-                    it.player.removeMetadata("frozen", PlayerListener.plugin)
+                    it.player.removeMetadata("frozen", Lemon.instance)
 
                     expirables.remove(it.player.uniqueId)
 
