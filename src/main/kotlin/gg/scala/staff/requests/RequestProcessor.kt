@@ -27,15 +27,6 @@ object RequestProcessor
     @Inject
     lateinit var plugin: ScalaStaffPlugin
 
-    @Configure
-    fun configure()
-    {
-        if (plugin.config<ScalaStaffConfig>().requestsEnabled)
-        {
-            plugin.commandManager.registerCommand(RequestCommand)
-        }
-    }
-
     fun getExpiration(player: Player): CompletableFuture<Long?>
     {
         return CompletableFuture

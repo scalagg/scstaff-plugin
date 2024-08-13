@@ -2,6 +2,7 @@ package gg.scala.staff.commands.requests
 
 import gg.scala.commons.acf.annotation.CommandAlias
 import gg.scala.commons.acf.annotation.CommandPermission
+import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.staff.requests.RequestProcessor
@@ -13,6 +14,7 @@ import java.util.concurrent.CompletableFuture
  * @author GrowlyX
  * @since 9/10/2022
  */
+@AutoRegister
 object RequestCommand : ScalaCommand()
 {
     @CommandAlias("helpop|request")
