@@ -8,6 +8,7 @@ import gg.scala.staff.stream.StaffMessageStream
 import net.evilblock.cubed.ScalaCommonsSpigot
 import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.Color
 import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -53,7 +54,7 @@ object WarningHandler
                 NetworkMetadataDataSync.metadata().language()
                     .warnMessage
                     .joinToString("\n") {
-                        it
+                        Color.translate(it)
                             .replace("{serverName}", NetworkMetadataDataSync.serverName())
                             .replace("{reason}", reason)
                     },
