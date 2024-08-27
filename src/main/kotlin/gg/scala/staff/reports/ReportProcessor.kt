@@ -11,15 +11,12 @@ import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.reports.model.Priority
 import gg.scala.staff.reports.model.PlayerReport
-import gg.scala.staff.reports.model.wrapper.WBsonDate
-import gg.scala.staff.reports.model.wrapper.BsonDateTimeGsonSerializer
 import gg.scala.staff.stream.Message
 import gg.scala.staff.stream.StaffMessageStream
 import gg.scala.store.controller.DataStoreObjectControllerCache
 import gg.scala.store.storage.type.DataStoreStorageType
 import io.lettuce.core.api.StatefulRedisConnection
 import net.evilblock.cubed.ScalaCommonsSpigot
-import net.evilblock.cubed.serializers.Serializers
 import net.evilblock.cubed.util.CC
 import net.md_5.bungee.api.chat.ClickEvent
 import org.bson.conversions.Bson
@@ -90,13 +87,6 @@ object ReportProcessor
                     description = "View punishment history of player",
                     command = "history ${playerReport.to.username()}"
                 )
-            )
-        }
-
-        Serializers.create {
-            registerTypeAdapter(
-                WBsonDate::class.java,
-                BsonDateTimeGsonSerializer
             )
         }
 

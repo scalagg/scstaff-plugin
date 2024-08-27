@@ -1,6 +1,7 @@
 package gg.scala.staff.warning
 
 import gg.scala.lemon.Lemon
+import gg.scala.lemon.metadata.NetworkMetadataDataSync
 import gg.scala.lemon.util.QuickAccess
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.stream.StaffMessageStream
@@ -49,8 +50,13 @@ object WarningHandler
             issuer.sendMessage("${ScalaStaffPlugin.PREFIX} ${CC.GREEN}You've warned $targetName${CC.GREEN} for ${CC.WHITE}$reason${CC.GREEN}.")
 
             QuickAccess.sendGlobalPlayerMessage(
-                Lemon.instance.languageConfig
-                    .warnMessage.format(reason),
+                NetworkMetadataDataSync.metadata().language()
+                    .warnMessage
+                    .joinToString("\n") {
+                        it
+                            .replace("{serverName}", NetworkMetadataDataSync.serverName())
+                            .replace("{reason}", reason)
+                    },
                 target
             )
 

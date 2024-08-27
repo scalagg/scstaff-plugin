@@ -38,7 +38,7 @@ dependencies {
     compileOnly("gg.scala.basics.plugin:scala-basics-plugin:1.0.5")
     compileOnly("gg.scala.spigot:server:1.1.0")
 
-    compileOnly("gg.scala.lemon:bukkit:1.7.0")
+    compileOnly("gg.scala.lemon:bukkit:1.9.1")
     compileOnly("gg.scala.cloudsync:spigot:1.0.1")
 }
 
