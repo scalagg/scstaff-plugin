@@ -37,16 +37,6 @@ object RequestCommand : ScalaCommand()
                     return@thenCompose CompletableFuture.completedFuture(null)
                 }
 
-                val lemon = PlayerHandler.find(player.uniqueId)
-                if (lemon != null) {
-                    if (lemon.activePunishments.containsKey(PunishmentCategory.MUTE)) {
-                        player.sendMessage("${CC.RED}You cant request for help when muted!")
-                        player.sendMessage("${CC.GRAY}To appeal create a ticket in the discord!")
-
-                        return@thenCompose CompletableFuture.completedFuture(null)
-                    }
-                }
-
                 player.sendMessage(
                     "${CC.GREEN}We've received your request. This will be looked into as soon as possible."
                 )
