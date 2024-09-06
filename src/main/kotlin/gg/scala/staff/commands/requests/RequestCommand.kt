@@ -5,6 +5,9 @@ import gg.scala.commons.acf.annotation.CommandPermission
 import gg.scala.commons.annotations.commands.AutoRegister
 import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
+import gg.scala.lemon.Lemon
+import gg.scala.lemon.handler.PlayerHandler
+import gg.scala.lemon.player.punishment.category.PunishmentCategory
 import gg.scala.staff.requests.RequestProcessor
 import net.evilblock.cubed.util.CC
 import org.apache.commons.lang3.time.DurationFormatUtils
@@ -32,6 +35,16 @@ object RequestCommand : ScalaCommand()
                         }${CC.RED} before using helpop again."
                     )
                     return@thenCompose CompletableFuture.completedFuture(null)
+                }
+
+                val lemon = PlayerHandler.find(player.uniqueId)
+                if (lemon != null) {
+                    if (lemon.activePunishments.containsKey(PunishmentCategory.MUTE)) {
+                        player.sendMessage("${CC.RED}You cant request for help when muted!")
+                        player.sendMessage("${CC.GRAY}To appeal create a ticket in the discord!")
+
+                        return@thenCompose CompletableFuture.completedFuture(null)
+                    }
                 }
 
                 player.sendMessage(
