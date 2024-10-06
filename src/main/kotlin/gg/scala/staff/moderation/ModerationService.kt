@@ -350,7 +350,7 @@ object ModerationService
     fun enterModMode(player: Player)
     {
         val enter = ModModeEnterEvent(player)
-        enter.callEvent()
+        Bukkit.getPluginManager().callEvent(enter)
 
         if (!enter.isCancelled)
         {
