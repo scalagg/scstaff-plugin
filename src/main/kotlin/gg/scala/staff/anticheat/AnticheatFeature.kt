@@ -8,6 +8,7 @@ import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.flavor.inject.Inject
 import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
+import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.anticheat.sampling.SixtySecondSample
@@ -130,8 +131,8 @@ object AnticheatFeature
 
             val fancyMessage = FancyMessage()
                 .withMessage(
-                    "${CC.RED}[AC] ${CC.D_RED}[$serverID] ${CC.WHITE}${alert.playerID.username()}${CC.RED} failed ${CC.B_WHITE}${alert.checkType}${CC.RED}.${
-                        " ${CC.GRAY}(VL: ${alert.violations})"
+                    "${CC.RED}[${CC.B_YELLOW}⚠${CC.RED}] ${CC.GRAY}[$serverID] ${QuickAccess.coloredName(alert.playerID.username())}${CC.GRAY} failed ${CC.GOLD}${alert.checkType}${CC.GRAY}${
+                        " ${CC.GRAY}[${CC.RED}${alert.violations}${CC.GRAY}]"
                     }"
                 )
                 .apply {

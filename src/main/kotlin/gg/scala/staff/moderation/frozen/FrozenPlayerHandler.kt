@@ -14,6 +14,8 @@ import gg.scala.staff.stream.StaffMessageStream
 import me.lucko.helper.Events
 import me.lucko.helper.promise.ThreadContext
 import net.evilblock.cubed.util.CC
+import net.evilblock.cubed.util.bukkit.FancyMessage
+import net.md_5.bungee.api.chat.ClickEvent
 import org.bukkit.Bukkit
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -35,7 +37,7 @@ object FrozenPlayerHandler : Runnable
     {
         Events.subscribe(PostFreezeEvent::class.java)
             .handler {
-                FrozenPlayerMenu().openMenu(it.player)
+//                FrozenPlayerMenu().openMenu(it.player)
             }
 
         Events
@@ -51,7 +53,16 @@ object FrozenPlayerHandler : Runnable
                 if (isFrozen)
                 {
                     StaffMessageStream.send(
-                        "${CC.AQUA}${QuickAccess.coloredName(it.player)}${CC.D_AQUA} logged out while frozen."
+                        FancyMessage().withMessage(
+                            "${CC.AQUA}${QuickAccess.coloredName(it.player)}${CC.D_AQUA} logged out while frozen.")
+                            .withMessage(" ${CC.GRAY}[${CC.RED}Ban${CC.GRAY}]")
+                            .andHoverOf(
+                                "${CC.GREEN}Click to ban ${QuickAccess.coloredName(it.player)}"
+                            )
+                            .andCommandOf(
+                                ClickEvent.Action.RUN_COMMAND,
+                                "/ban ${it.player.uniqueId.username()} 30d Logged out whilst frozen -s"
+                            ).toString()
                     )
 
                     it.player.removeMetadata("frozen", Lemon.instance)
@@ -62,7 +73,7 @@ object FrozenPlayerHandler : Runnable
                     {
                         Bukkit.dispatchCommand(
                             Bukkit.getConsoleSender(),
-                            "ban ${it.player.uniqueId.username()} perm Disconnected while frozen -s"
+                            "/ban ${it.player.uniqueId.username()} 30d Logged out whilst frozen -s"
                         )
                         return@handler
                     }

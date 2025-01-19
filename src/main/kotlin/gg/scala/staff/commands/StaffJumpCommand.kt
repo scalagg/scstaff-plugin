@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture
 @AutoRegister
 object StaffJumpCommand : ScalaCommand()
 {
-    @CommandAlias("jump")
+    @CommandAlias("jump|jtp|jumptoplayer")
     @CommandCompletion("@players")
     @CommandPermission("scstaff.command.jump")
     fun onJump(player: Player, target: AsyncLemonPlayer): CompletableFuture<Void>
