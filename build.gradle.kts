@@ -14,7 +14,7 @@ var currentBranch: String = grgit.branch.current().name
 
 allprojects {
     group = "gg.scala.staff"
-    version = "1.1.0${
+    version = "1.1.1${
         if (currentBranch == "develop") "-dev" else ""
     }"
 
