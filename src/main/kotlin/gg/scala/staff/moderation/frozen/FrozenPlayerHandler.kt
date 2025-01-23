@@ -10,6 +10,7 @@ import gg.scala.lemon.util.QuickAccess.username
 import gg.scala.lemon.util.other.Expirable
 import gg.scala.staff.config
 import gg.scala.staff.moderation.frozen.event.PostFreezeEvent
+import gg.scala.staff.stream.Message
 import gg.scala.staff.stream.StaffMessageStream
 import me.lucko.helper.Events
 import me.lucko.helper.promise.ThreadContext
@@ -52,16 +53,18 @@ object FrozenPlayerHandler : Runnable
 
                 if (isFrozen)
                 {
-                    StaffMessageStream.send(
-                        FancyMessage().withMessage(
-                            "${CC.AQUA}${QuickAccess.coloredName(it.player)}${CC.D_AQUA} logged out while frozen. ${CC.GRAY}[${CC.RED}Ban${CC.GRAY}]")
+
+                    StaffMessageStream.sendComplex(
+                        Message().withMessage(
+                            "${CC.AQUA}${QuickAccess.coloredName(it.player)}${CC.D_AQUA} logged out while frozen.")
+                            .withMessage(" ${CC.GRAY}[${CC.RED}Ban${CC.GRAY}]")
                             .andHoverOf(
                                 "${CC.GREEN}Click to ban ${QuickAccess.coloredName(it.player)}"
                             )
                             .andCommandOf(
                                 ClickEvent.Action.RUN_COMMAND,
-                                "/ban ${it.player.uniqueId.username()} 30d Logged out whilst frozen"
-                            ).toString()
+                                "/ban ${it.player.uniqueId.username()} 30d Logged out whilst frozen -s"
+                            )
                     )
 
                     it.player.removeMetadata("frozen", Lemon.instance)
