@@ -56,14 +56,13 @@ object FrozenPlayerHandler : Runnable
 
                     StaffMessageStream.sendComplex(
                         Message().withMessage(
-                            "${CC.AQUA}${QuickAccess.coloredName(it.player)}${CC.D_AQUA} logged out while frozen.")
-                            .withMessage(" ${CC.GRAY}[${CC.RED}Ban${CC.GRAY}]")
+                            "${CC.AQUA}${QuickAccess.coloredName(it.player)}${CC.D_AQUA} logged out while frozen. ${CC.GRAY}[${CC.RED}Ban${CC.GRAY}]")
                             .andHoverOf(
                                 "${CC.GREEN}Click to ban ${QuickAccess.coloredName(it.player)}"
                             )
                             .andCommandOf(
                                 ClickEvent.Action.RUN_COMMAND,
-                                "/ban ${it.player.uniqueId.username()} 30d Logged out whilst frozen -s"
+                                "/ban ${it.player.uniqueId.username()} 30d Logged out whilst frozen"
                             )
                     )
 
