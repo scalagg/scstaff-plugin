@@ -32,7 +32,7 @@ object StaffSettingsCategory : SettingCategory
             description += "Allows you to disable"
             description += "these action notifications:"
             description += ""
-            description += "${CC.I_GRAY}[GrowlyX: ${CC.YELLOW}enabled fly${CC.I_GRAY}]"
+            description += "${CC.I_GRAY}[Scala: ${CC.YELLOW}enabled fly${CC.I_GRAY}]"
 
             displayPredicate = {
                 it.hasPermission("scbasics.notifications")
