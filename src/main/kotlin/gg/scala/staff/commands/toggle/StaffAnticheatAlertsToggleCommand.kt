@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture
 @AutoRegister
 object StaffAnticheatAlertsToggleCommand : ScalaCommand()
 {
-    @CommandAlias("toggleanticheatalerts|taa|anticheatalerts|acalerts")
+    @CommandAlias("toggleanticheatalerts|taa|anticheatalerts|acalerts|alerts|toggleglobalalerts")
     @CommandPermission("scstaff.command.anticheatalerts")
     fun onAnticheatAlerts(player: ScalaPlayer): CompletableFuture<Void>
     {
