@@ -16,7 +16,7 @@ object StaffChatChannelService
     @Configure
     fun configure()
     {
-        StaffChatChannelType.values()
+        StaffChatChannelType.entries
             .forEach { register(it) }
     }
 
