@@ -23,36 +23,36 @@ import net.kyori.adventure.text.format.NamedTextColor
 object StaffChatChannelCommands : ScalaCommand()
 {
     // TODO: DYNAMIC SOLUTION FOR THIS MADNESS
-    @CommandAlias("ownerchat|oc|o")
+    @CommandAlias("ownerchat|oc")
     @CommandPermission("scstaff.channel.owner")
     fun onOwnerChat(
         player: ScalaPlayer, @Optional message: String?
     )
     {
         performStaffChannel(
-            player, StaffChatChannelType.Owner, message
+            player, StaffChatChannelType.OWNER, message
         )
     }
 
-    @CommandAlias("developerchat|dc|d")
-    @CommandPermission("scstaff.channel.developer")
-    fun onDeveloperChat(
+    @CommandAlias("engineerchat|ec")
+    @CommandPermission("scstaff.channel.engineer")
+    fun onEngineerChat(
         player: ScalaPlayer, @Optional message: String?
     )
     {
         performStaffChannel(
-            player, StaffChatChannelType.Developer, message
+            player, StaffChatChannelType.ENGINEER, message
         )
     }
 
-    @CommandAlias("staffchat|sc|s")
+    @CommandAlias("staffchat|sc")
     @CommandPermission("scstaff.channel.staff")
     fun onStaffChat(
         player: ScalaPlayer, @Optional message: String?
     )
     {
         performStaffChannel(
-            player, StaffChatChannelType.Staff, message
+            player, StaffChatChannelType.STAFF, message
         )
     }
 
@@ -63,7 +63,7 @@ object StaffChatChannelCommands : ScalaCommand()
     )
     {
         performStaffChannel(
-            player, StaffChatChannelType.Admin, message
+            player, StaffChatChannelType.ADMIN, message
         )
     }
 

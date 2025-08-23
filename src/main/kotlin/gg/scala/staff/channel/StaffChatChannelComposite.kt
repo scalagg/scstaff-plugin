@@ -35,16 +35,16 @@ class StaffChatChannelComposite(
         val username = ScalaStoreUuidCache.username(sender)
 
         return Component
-            .text("[${type.name[0]}] ")
+            .text("[${type.name}] ")
             .color(type.color)
             .append(
-                Component.text("[$server] ")
-                    .color(NamedTextColor.DARK_AQUA)
+                Component.text("($server) ")
+                    .color(NamedTextColor.GRAY)
             )
             .append(
                 urlExtractingDeserializer
                     .deserialize(
-                        "${rank.color}$username${ChatColor.GRAY}: ${ChatColor.AQUA}${message}"
+                        "${rank.prefix} ${rank.color}$username${ChatColor.WHITE}: ${message}"
                     )
             )
     }

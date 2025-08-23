@@ -32,7 +32,7 @@ class ReportMenu(
     {
         val buttons = mutableMapOf<Int, Button>()
 
-        for (reportType in ReportType.entries)
+        for (reportType in ReportType.values())
         {
             buttons[buttons.size] = ItemBuilder(reportType.material)
                 .name("${CC.GREEN}${reportType.fancyName}")

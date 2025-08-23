@@ -14,7 +14,7 @@ var currentBranch: String = grgit.branch.current().name
 
 allprojects {
     group = "gg.scala.staff"
-    version = "1.1.2${
+    version = "1.1.3${
         if (currentBranch == "develop") "-dev" else ""
     }"
 
@@ -29,8 +29,8 @@ dependencies {
     compileOnly(kotlin("stdlib"))
     api(fileTree("lib"))
 
-    kapt("gg.scala.commons:bukkit:4.0.4")
-    compileOnly("gg.scala.commons:bukkit:4.0.4")
+    kapt("gg.scala.commons:bukkit:4.0.7")
+    compileOnly("gg.scala.commons:bukkit:4.0.7")
 
     compileOnly("gg.scala.store:spigot:0.1.8")
     compileOnly("gg.scala.basics.plugin:scala-basics-plugin:1.0.5")

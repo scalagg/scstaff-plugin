@@ -13,8 +13,8 @@ enum class StaffChatChannelType(
     val chatColor: ChatColor,
 )
 {
-    Staff('#', NamedTextColor.AQUA, ChatColor.AQUA),
-    Admin('@', NamedTextColor.RED, ChatColor.RED),
-    Developer('$', NamedTextColor.BLUE, ChatColor.BLUE),
-    Owner('!', NamedTextColor.DARK_RED, ChatColor.DARK_RED)
+    STAFF('#', NamedTextColor.AQUA, ChatColor.AQUA),
+    ADMIN('@', NamedTextColor.RED, ChatColor.RED),
+    ENGINEER('$', NamedTextColor.GOLD, ChatColor.GOLD),
+    OWNER('!', NamedTextColor.DARK_RED, ChatColor.DARK_RED)
 }

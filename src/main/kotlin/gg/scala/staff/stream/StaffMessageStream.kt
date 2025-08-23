@@ -85,8 +85,8 @@ object StaffMessageStream
         val additionalFlag = this
             .retrieveNullable<String>("additionalFlag")
 
-        val baseMessage = "${ChatColor.AQUA}[S] ${
-            if (includeFrom) "${ChatColor.DARK_AQUA}[$from] " else ""
+        val baseMessage = "${ChatColor.AQUA}[STAFF] ${
+            if (includeFrom) "${ChatColor.GRAY}($from) " else ""
         }"
         val message = parseMessage(baseMessage, content)
 
