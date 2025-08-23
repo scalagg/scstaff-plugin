@@ -37,7 +37,7 @@ object FindPlayerCommand : ScalaCommand()
                 )
 
             player.sendMessage(
-                "${CC.GREEN}Last seen:",
+                "${CC.GREEN}${it.name} was last seen:",
                 "${CC.WHITE}${
                     TimeUtil.formatIntoAbbreviatedString(((System.currentTimeMillis() - lastSeen) / 1000L).toInt())
                 }"

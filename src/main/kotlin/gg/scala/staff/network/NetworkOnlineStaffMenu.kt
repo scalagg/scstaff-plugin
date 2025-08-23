@@ -1,7 +1,9 @@
 package gg.scala.staff.network
 
 import com.cryptomorin.xseries.XMaterial
+import gg.scala.lemon.handler.PlayerHandler
 import gg.scala.lemon.handler.RankHandler
+import gg.scala.lemon.util.QuickAccess
 import gg.scala.lemon.util.QuickAccess.username
 import net.evilblock.cubed.menu.Button
 import net.evilblock.cubed.menu.pagination.PaginatedMenu
@@ -54,7 +56,7 @@ class NetworkOnlineStaffMenu : PaginatedMenu()
     override fun size(buttons: Map<Int, Button>) = 45
     override fun getMaxItemsPerPage(player: Player) = SLOTS.size
 
-    override fun getPrePaginatedTitle(player: Player) = "Online Staff"
+    override fun getPrePaginatedTitle(player: Player) = "Network Online Staff"
 
     inner class OnlineStaffButton(
         private val staffMember: NetworkOnlineStaffUpdates.StaffMember
@@ -71,13 +73,13 @@ class NetworkOnlineStaffMenu : PaginatedMenu()
                 ?: RankHandler.getDefaultRank()
 
             val description = mutableListOf<String>()
-            description.add("${CC.WHITE}Rank: ${CC.WHITE}${rankData.prefix}")
-            description.add("${CC.WHITE}Server: ${CC.YELLOW}${staffMember.server}")
+            description.add("${CC.GRAY}Server: ${CC.WHITE}${staffMember.server}")
+            description.add("${CC.GRAY}Rank: ${CC.WHITE}${rankData.getColoredName()}")
             description.add("")
             description.add("${CC.GREEN}Click to jump.")
 
             return ItemBuilder(XMaterial.SKELETON_SKULL)
-                .name("$rank$username")
+                .name("${rankData.prefix} $rank$username")
                 .owner(username)
                 .setLore(description)
                 .data(3).build()
