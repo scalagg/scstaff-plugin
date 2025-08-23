@@ -42,16 +42,20 @@ object ModModeScoreboardOverride : ScoreboardOverride()
         val vanished = lemonPlayer.bukkitPlayer!!.hasMetadata("vanished")
 
         board.add("")
-        board.add("${CC.GRAY}${Constants.THICK_VERTICAL_LINE} ${CC.WHITE}Rank: ${CC.PRI}${rank.getColoredName()}")
-        board.add("${CC.GRAY}${Constants.THICK_VERTICAL_LINE} ${CC.WHITE}Channel: ${profile.staffChannel?.chatColor}${
+        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Rank: ${CC.PRI}${rank.getColoredName()}")
+        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Channel: ${profile.staffChannel?.chatColor ?: ""}${
             profile.staffChannel?.name ?: "${CC.GREEN}Public"
         }")
-        board.add("${CC.GRAY}${Constants.THICK_VERTICAL_LINE} ${CC.WHITE}Ping: ${CC.PRI}${MinecraftReflection.getPing(player)}ms")
-        board.add("${CC.GRAY}${Constants.THICK_VERTICAL_LINE} ${CC.WHITE}Vanish: ${if (vanished) CC.GREEN + Constants.CHECK_SYMBOL else CC.RED + Constants.X_SYMBOL}")
-        board.add("${CC.GRAY}${Constants.THICK_VERTICAL_LINE} ${CC.WHITE}Showing Staff: ${if (hidingStaff) CC.RED + Constants.X_SYMBOL else CC.GREEN + Constants.CHECK_SYMBOL}")
+        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Ping: ${CC.PRI}${MinecraftReflection.getPing(player)}ms")
         board.add("")
+        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Vanish: ${if (vanished) CC.GREEN + Constants.CHECK_SYMBOL else CC.RED + Constants.X_SYMBOL}")
+        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Showing Staff: ${if (hidingStaff) CC.RED + Constants.X_SYMBOL else CC.GREEN + Constants.CHECK_SYMBOL}")
+        board.add("")
+        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}TPS: ${CC.GREEN}${
+            String.format("%.2f", Lemon.instance.serverStatisticProvider.ticksPerSecond())
+        }")
         board.add(
-            "${CC.GRAY}${Constants.THICK_VERTICAL_LINE} ${CC.WHITE}Players: ${CC.PRI}${Bukkit.getOnlinePlayers().size} ${CC.GRAY}(${
+            "${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Players: ${CC.PRI}${Bukkit.getOnlinePlayers().size} ${CC.GRAY}(${
                 ServerSync
                     .getLocalGameServer()
                     .getMetadataValue(
@@ -60,9 +64,6 @@ object ModModeScoreboardOverride : ScoreboardOverride()
                     ?: 1 // the player's on the server
             })"
         )
-        board.add("${CC.GRAY}${Constants.THICK_VERTICAL_LINE} ${CC.WHITE}TPS: ${CC.GREEN}${
-            String.format("%.2f", Lemon.instance.serverStatisticProvider.ticksPerSecond())
-        }")
 
         board.add("")
         board.add("${CC.GRAY}${LemonConstants.WEB_LINK}")
