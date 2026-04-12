@@ -11,10 +11,6 @@ import gg.scala.staff.ScalaStaffPlugin
 import gg.scala.staff.provider.SettingProvider
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 10/16/2022
- */
 @Service
 @IgnoreAutoScan
 @SoftDependency("ScBasics")

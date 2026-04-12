@@ -23,10 +23,6 @@ import org.bukkit.entity.Player
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object ReportCommand : ScalaCommand()
 {
@@ -66,11 +62,7 @@ object ReportCommand : ScalaCommand()
                         throw ConditionFailedException("You're not allowed to report yourself.")
                     }
 
-                    // TODO: proper permisison load
-                    /*if ("scstaff.command.report.bypass" in lemonPlayer)
-                    {
-                        throw ConditionFailedException("You're unable to report ${CC.YELLOW}${lemonPlayer.name}${CC.RED}.")
-                    }*/
+                    
 
                     plugin.flavor()
                         .injected<ReportMenu>(lemonPlayer.uniqueId)

@@ -13,18 +13,6 @@ import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
 
-/**
- * Maps all online staff on the desired
- * network to their prominent rank.
- *
- * Online staff are refreshed every second.
- *
- * TODO: We may want to cache prominent ranks in
- *  Redis to avoid querying the database too many times
- *
- * @author GrowlyX
- * @since 9/8/2022
- */
 @Repeating(40L, context = ThreadContext.ASYNC)
 object NetworkOnlineStaffUpdates : Runnable
 {

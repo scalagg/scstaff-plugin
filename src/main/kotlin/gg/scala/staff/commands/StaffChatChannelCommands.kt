@@ -15,14 +15,10 @@ import gg.scala.staff.profile.StaffProfileService
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffChatChannelCommands : ScalaCommand()
 {
-    // TODO: DYNAMIC SOLUTION FOR THIS MADNESS
+
     @CommandAlias("ownerchat|oc")
     @CommandPermission("scstaff.channel.owner")
     fun onOwnerChat(

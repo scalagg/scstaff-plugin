@@ -15,10 +15,6 @@ import org.bukkit.command.CommandSender
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object ChatClearCommand : ScalaCommand()
 {

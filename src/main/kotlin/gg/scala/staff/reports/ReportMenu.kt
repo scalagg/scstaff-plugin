@@ -12,10 +12,6 @@ import org.bukkit.conversations.*
 import org.bukkit.entity.Player
 import java.util.UUID
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 class ReportMenu(
     private val target: UUID
 ) : Menu()
@@ -86,7 +82,6 @@ class ReportMenu(
 
                                         Button.playNeutral(player)
                                     }
-
 
                                 context.allSessionData["completed"] = true
                                 return true

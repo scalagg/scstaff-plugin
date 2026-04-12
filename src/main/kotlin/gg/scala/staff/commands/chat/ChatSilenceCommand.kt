@@ -18,10 +18,6 @@ import net.evilblock.cubed.util.CC
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object ChatSilenceCommand : ScalaCommand()
 {

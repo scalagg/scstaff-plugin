@@ -8,10 +8,6 @@ import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.staff.moderation.ModerationService
 import gg.scala.staff.notify
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffModeCommand : ScalaCommand()
 {

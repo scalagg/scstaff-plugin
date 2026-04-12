@@ -10,10 +10,6 @@ import gg.scala.staff.moderation.ModerationService
 import gg.scala.staff.notify
 import gg.scala.staff.settings.StaffSettingsMenu
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffSettingsCommand : ScalaCommand()
 {

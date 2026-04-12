@@ -6,10 +6,6 @@ import gg.scala.lemon.channel.ChatChannelBuilder
 import gg.scala.lemon.channel.ChatChannelService
 import gg.scala.staff.profile.StaffProfileService
 
-/**
- * @author GrowlyX
- * @since 4/6/2022
- */
 @Service
 object StaffChatChannelService
 {

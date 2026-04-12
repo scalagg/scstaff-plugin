@@ -13,10 +13,6 @@ import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 object WarningHandler
 {
     data class WrappedWarn(

@@ -5,10 +5,6 @@ import gg.scala.lemon.LemonConstants
 import net.evilblock.cubed.util.CC
 import xyz.mkotb.configapi.Coloured
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @Config("config")
 class ScalaStaffConfig
 {

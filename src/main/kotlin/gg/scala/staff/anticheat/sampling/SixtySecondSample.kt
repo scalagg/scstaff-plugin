@@ -1,9 +1,5 @@
 package gg.scala.staff.anticheat.sampling
 
-/**
- * @author GrowlyX
- * @since 1/20/2024
- */
 class SixtySecondSample(
     val tenSecondSamples: MutableList<TenSecondSample> = mutableListOf(),
     var current: TenSecondSample = TenSecondSample(),

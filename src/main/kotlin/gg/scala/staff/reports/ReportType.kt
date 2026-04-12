@@ -2,10 +2,6 @@ package gg.scala.staff.reports
 
 import com.cryptomorin.xseries.XMaterial
 
-/**
- * @author GrowlyX
- * @since 9/6/2021
- */
 enum class ReportType(
     val fancyName: String,
     val examples: List<String>,

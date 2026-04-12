@@ -8,10 +8,6 @@ import gg.scala.staff.network.NetworkOnlineStaffMenu
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.ItemBuilder
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 object ModModeHotbar
 {
     val hotbar by lazy {

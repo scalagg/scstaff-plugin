@@ -24,9 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-
 /**
- * @author Topu
  * @date 3/20/2025
  */
 @AutoRegister

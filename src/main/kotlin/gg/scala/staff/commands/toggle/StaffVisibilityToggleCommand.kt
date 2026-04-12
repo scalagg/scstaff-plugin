@@ -12,10 +12,6 @@ import net.evilblock.cubed.visibility.VisibilityHandler
 import org.bukkit.ChatColor
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffVisibilityToggleCommand : ScalaCommand()
 {

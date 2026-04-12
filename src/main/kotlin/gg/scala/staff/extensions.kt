@@ -8,10 +8,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @Service
 object InjectionContainer
 {

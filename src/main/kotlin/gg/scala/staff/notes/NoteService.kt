@@ -13,10 +13,6 @@ import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 10/7/2021
- */
 @Service
 object NoteService
 {

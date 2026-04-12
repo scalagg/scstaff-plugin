@@ -7,10 +7,6 @@ import gg.scala.commons.command.ScalaCommand
 import gg.scala.commons.issuer.ScalaPlayer
 import gg.scala.staff.anticheat.AnticheatFeature
 
-/**
- * @author GrowlyX
- * @since 7/25/2024
- */
 @AutoRegister
 object ACTestCommand : ScalaCommand()
 {

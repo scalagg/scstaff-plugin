@@ -14,10 +14,6 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
 
-/**
- * @author GrowlyX
- * @since 11/22/2021
- */
 class NetworkOnlineStaffMenu : PaginatedMenu()
 {
     companion object

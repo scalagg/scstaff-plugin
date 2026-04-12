@@ -14,10 +14,6 @@ import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.command.CommandSender
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffWarnCommand : ScalaCommand()
 {

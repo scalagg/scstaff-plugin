@@ -23,10 +23,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 9/23/2021
- */
 @Service
 @Repeating(100L, context = ThreadContext.ASYNC)
 object FrozenPlayerHandler : Runnable
@@ -38,7 +34,7 @@ object FrozenPlayerHandler : Runnable
     {
         Events.subscribe(PostFreezeEvent::class.java)
             .handler {
-//                FrozenPlayerMenu().openMenu(it.player)
+
             }
 
         Events

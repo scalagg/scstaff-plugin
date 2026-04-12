@@ -14,10 +14,6 @@ import net.evilblock.cubed.util.bukkit.FancyMessage
 import net.evilblock.cubed.util.time.TimeUtil
 import net.md_5.bungee.api.chat.ClickEvent
 
-/**
- * @author GrowlyX
- * @since 4/3/2023
- */
 @AutoRegister
 object FindPlayerCommand : ScalaCommand()
 {

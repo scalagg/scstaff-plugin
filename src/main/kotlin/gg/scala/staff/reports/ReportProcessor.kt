@@ -25,10 +25,6 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @Service
 object ReportProcessor
 {

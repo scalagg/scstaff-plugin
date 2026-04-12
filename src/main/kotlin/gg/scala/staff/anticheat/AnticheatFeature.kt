@@ -27,10 +27,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * @author GrowlyX
- * @since 12/23/2023
- */
 @Service
 object AnticheatFeature
 {

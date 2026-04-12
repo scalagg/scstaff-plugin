@@ -9,10 +9,6 @@ import gg.scala.staff.reports.ReportProcessor
 import gg.scala.staff.reports.ViewReportsMenu
 import net.evilblock.cubed.util.CC
 
-/**
- * @author GrowlyX
- * @since 1/16/2024
- */
 @AutoRegister
 @CommandPermission("scstaff.command.reports")
 @CommandAlias("reports|staffreports|viewreports")

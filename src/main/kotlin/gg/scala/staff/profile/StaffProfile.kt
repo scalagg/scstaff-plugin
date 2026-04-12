@@ -7,10 +7,6 @@ import gg.scala.store.storage.storable.IDataStoreObject
 import gg.scala.store.storage.type.DataStoreStorageType
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 data class StaffProfile(
     override val identifier: UUID
 ) : IDataStoreObject, Savable

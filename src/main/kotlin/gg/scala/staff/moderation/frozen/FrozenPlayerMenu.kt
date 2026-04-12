@@ -9,10 +9,6 @@ import net.evilblock.cubed.util.bukkit.ItemBuilder
 import net.evilblock.cubed.util.bukkit.Tasks
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 class FrozenPlayerMenu : Menu("You're frozen!")
 {
     init
@@ -68,8 +64,8 @@ class FrozenPlayerMenu : Menu("You're frozen!")
     {
         if (player.hasMetadata("frozen"))
         {
-            // We're re-opening the menu if the
-            // player is still frozen
+
+            
             Tasks.delayed(1L) { openMenu(player) }
         }
     }

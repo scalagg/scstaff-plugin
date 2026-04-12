@@ -19,10 +19,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.metadata.FixedMetadataValue
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffFreezeCommand : ScalaCommand()
 {

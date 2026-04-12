@@ -13,10 +13,6 @@ import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Constants
 import org.bukkit.ChatColor
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @Plugin(
     name = "ScStaff",
     version = "%remote%/%branch%/%id%"

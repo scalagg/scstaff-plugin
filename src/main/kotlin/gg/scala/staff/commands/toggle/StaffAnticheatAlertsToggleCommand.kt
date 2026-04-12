@@ -11,10 +11,6 @@ import gg.scala.staff.profile.StaffProfileService
 import org.bukkit.ChatColor
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffAnticheatAlertsToggleCommand : ScalaCommand()
 {

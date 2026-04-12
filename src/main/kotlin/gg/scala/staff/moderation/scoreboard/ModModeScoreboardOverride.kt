@@ -12,15 +12,10 @@ import gg.scala.staff.profile.StaffProfileService
 import net.evilblock.cubed.scoreboard.ScoreboardOverride
 import net.evilblock.cubed.util.CC
 import net.evilblock.cubed.util.bukkit.Constants
-import net.evilblock.cubed.util.nms.MinecraftReflection
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 object ModModeScoreboardOverride : ScoreboardOverride()
 {
     override fun getTitle(player: Player) = ModModeScoreboardAnimation.getCurrentTitle()
@@ -46,7 +41,7 @@ object ModModeScoreboardOverride : ScoreboardOverride()
         board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Channel: ${profile.staffChannel?.chatColor ?: ""}${
             profile.staffChannel?.name ?: "${CC.GREEN}Public"
         }")
-        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Ping: ${CC.PRI}${MinecraftReflection.getPing(player)}ms")
+        board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Ping: ${CC.PRI}${player.ping}ms")
         board.add("")
         board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Vanish: ${if (vanished) CC.GREEN + Constants.CHECK_SYMBOL else CC.RED + Constants.X_SYMBOL}")
         board.add("${CC.GRAY}${Constants.THIN_VERTICAL_LINE} ${CC.WHITE}Showing Staff: ${if (hidingStaff) CC.RED + Constants.X_SYMBOL else CC.GREEN + Constants.CHECK_SYMBOL}")

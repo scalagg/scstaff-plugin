@@ -11,10 +11,6 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 4/6/2022
- */
 class StaffChatChannelComposite(
     private val type: StaffChatChannelType
 ): ChatChannelComposite

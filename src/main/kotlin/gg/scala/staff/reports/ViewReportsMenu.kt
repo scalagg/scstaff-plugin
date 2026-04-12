@@ -19,10 +19,6 @@ import net.md_5.bungee.api.chat.ClickEvent
 import org.bukkit.entity.Player
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 1/16/2024
- */
 data class ViewReportsMenu(
     private val reports: () -> CompletableFuture<List<PlayerReport>>,
     private val source: String = ""

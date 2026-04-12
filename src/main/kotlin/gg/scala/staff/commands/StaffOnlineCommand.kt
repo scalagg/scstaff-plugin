@@ -8,10 +8,6 @@ import gg.scala.staff.network.NetworkOnlineStaffMenu
 import gg.scala.staff.ScalaStaffPlugin
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object StaffOnlineCommand : ScalaCommand()
 {

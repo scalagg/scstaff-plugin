@@ -16,10 +16,6 @@ import gg.scala.staff.notify
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 9/15/2021
- */
 @AutoRegister
 object StaffVanishCommand : ScalaCommand()
 {

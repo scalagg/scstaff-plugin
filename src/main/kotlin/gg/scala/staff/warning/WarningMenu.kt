@@ -10,10 +10,6 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 class WarningMenu(
     private val target: UUID
 ) : PaginatedMenu()

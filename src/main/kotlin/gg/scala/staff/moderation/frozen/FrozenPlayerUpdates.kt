@@ -8,10 +8,6 @@ import me.lucko.helper.promise.ThreadContext
 import net.evilblock.cubed.util.CC
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 4/14/2022
- */
 @Repeating(20L, context = ThreadContext.ASYNC)
 object FrozenPlayerUpdates : Runnable
 {

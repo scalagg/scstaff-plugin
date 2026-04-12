@@ -9,10 +9,6 @@ import gg.scala.lemon.listener.PlayerListener
 import net.evilblock.cubed.util.CC
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @Service
 object ChatControlService
 {

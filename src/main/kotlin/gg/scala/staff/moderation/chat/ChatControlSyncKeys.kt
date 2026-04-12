@@ -4,10 +4,6 @@ import gg.scala.commons.agnostic.sync.ServerSync
 import gg.scala.commons.persist.datasync.DataSyncKeys
 import gg.scala.lemon.Lemon
 
-/**
- * @author GrowlyX
- * @since 10/12/2022
- */
 object ChatControlSyncKeys : DataSyncKeys
 {
     private val chatControlLocalID by lazy {

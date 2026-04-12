@@ -8,10 +8,6 @@ import net.evilblock.cubed.visibility.VisibilityAdapter
 import net.evilblock.cubed.visibility.VisibilityAdapterRegister
 import org.bukkit.entity.Player
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @VisibilityAdapterRegister("staff")
 object StaffVisibilityAdapter : VisibilityAdapter
 {

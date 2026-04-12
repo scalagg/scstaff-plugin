@@ -13,10 +13,6 @@ import net.evilblock.cubed.util.CC
 import org.apache.commons.lang3.time.DurationFormatUtils
 import java.util.concurrent.CompletableFuture
 
-/**
- * @author GrowlyX
- * @since 9/10/2022
- */
 @AutoRegister
 object RequestCommand : ScalaCommand()
 {

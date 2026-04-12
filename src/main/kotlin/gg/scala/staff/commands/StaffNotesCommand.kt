@@ -14,10 +14,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.util.*
 
-/**
- * @author GrowlyX
- * @since 10/8/2021
- */
 @AutoRegister
 @CommandPermission("scstaff.command.notes")
 @CommandAlias("note|notes|profilenotes|staffnotes")
